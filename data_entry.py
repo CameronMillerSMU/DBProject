@@ -3,11 +3,11 @@ from project import *
 db_conn = create_connection("localhost", "root", "beepboop", "progDB")
 cursor = db_conn.cursor()
 
-# create_database(cursor, "DBprog")
+create_database(cursor, "DBprog")
 
-tables = ["Programs", "Departments", "Faculty", "Courses",
-          "Semesters", "CourseSections", "LearningObjectives", 
-          "ProgramObjectives", "SectionObjectives", "SubObjectives"]
+tables = ["Program", "Department", "Faculty", "Course", "Section", 
+          "LearningObjective", "SubObjective", "CourseEval",
+          "SectionEval", "ProgramObjective"]
 
 def clear_database(cursor, connection, tableList):
     try:
