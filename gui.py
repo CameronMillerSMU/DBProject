@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from queries import *
 from entry import *
+from testAll import *
 
 class DatabaseGUI:
     def __init__(self, master, cursor):
@@ -95,7 +96,19 @@ class DatabaseGUI:
 
 
 if __name__ == "__main__":
+    """CHANGE THIS TO RUN"""
+    dbConn = create_connection("localhost", "root", "123456", "progDB")
+    print(dbConn)
+    cursor = dbConn.cursor()
+    print(cursor)
+    create_database(cursor, "progDB")
+    
+    
+    create_tables_from_file(cursor, "test_schema.sql", dbConn)
+
+
+
     root = tk.Tk()
 
-    gui = DatabaseGUI(root, None)
+    gui = DatabaseGUI(root, cursor)
     root.mainloop()
