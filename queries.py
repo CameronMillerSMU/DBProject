@@ -2,9 +2,9 @@ import mysql.connector as sql
 from mysql.connector import Error
 
 # Queries
-def get_department(cursor, department_id):
+def get_department(cursor, department_code):
     try:
-        cursor.execute("SELECT * FROM Department WHERE DepartmentID = %s", (department_id,))
+        cursor.execute("SELECT * FROM Department WHERE DepartmentCode = %s", (department_code,))
         department_data = cursor.fetchone()
         if not department_data:
             return None
