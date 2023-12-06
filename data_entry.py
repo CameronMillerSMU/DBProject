@@ -1,11 +1,12 @@
 from project import *
 
-db_conn = create_connection("localhost", "root", "beepboop", "DBprog")
+db_conn = create_connection("localhost", "root", "beepboop", "progDB")
 cursor = db_conn.cursor()
+
 create_database(cursor, "DBprog")
 
 tables = ["Programs", "Departments", "Faculty", "Courses",
-          "Semesters", "CourseSections", "LearningObjectives", 
+           "CourseSections", "LearningObjectives", 
           "ProgramObjectives", "SectionObjectives"]
 
 def clear_database(cursor, connection, tableList):
@@ -15,33 +16,41 @@ def clear_database(cursor, connection, tableList):
             sqlcom = "DROP TABLE IF EXISTS %s" % (table)
             cursor.execute(sqlcom)
         cursor.execute("SET FOREIGN_KEY_CHECKS = 1")
+
+        print("Database cleared successfully")
     except Error as e:
         print(f"The error '{e} occurred'")
     connection.commit()
 
 # clear_database(cursor, db_conn, tables)
 
-#todo: create the tables from file 
-def execute_scripts_from_file(filename):
-    file = open(filename, 'r')
-    sql_file = file.read()
-    file.close()
+#create the tables from file 
+def create_tables_from_file_m(cursor, filename, connection):
+    try:
+        with open(filename,'r') as file:
+            sql_script = file.read()
+            
+        for result in cursor.execute(sql_script, multi=True):
+            pass
+    except Error as e:
+        print(f"The error '{e} occurred'")
+    
+    connection.commit()
 
-    # get commands 
-    sql_commands = sql_file.split(';')
-
-    # execute comamnds in file
-    for command in sql_commands:
-        try:
-            cursor.execute(command)
-        except Error as e:
-            print(f"The error '{e}' occurred")
-
-execute_scripts_from_file("test_schema.sql")
+create_tables_from_file_m(cursor, "test_schema.sql", db_conn)
 
 # TODO: do checks for data entry - Courses, Sections, LearningObjectives
 
-#
+# courses - checks 
+#   - does the dept exist
+#       - if so, continue 
+#       - if not, error
+# sections - checks 
+#   - does the course and faculty member exist 
+#       - if so, continue
+#       - if not, error (course or faculty member does not exist
+# learning objectives - no checks needed (check happen outsode function in gui)
+##
 
 def enter_course_data(cursor, connector, c_id, c_title, c_description, dept_code):
     try:
@@ -63,11 +72,11 @@ def enter_section_data(cursor, connector, s_id, c_id, semester_id, f_id, student
     except Error as e:
         print(f"Error inserting Course Section data: {e}")
 
-def enter_learningObjectives_data(cursor, connector, prog_name, obj_code):
+def enter_learningObjectives_data(cursor, connector, obj_code, obj_description):
     try:
         #insert data into Learning Objectives table
-        cursor.execute("INSERT INTO LearningObjectives (ProgramName, ObjectiveCode) VALUES (?,?)",
-                       prog_name, obj_code)
+        cursor.execute("INSERT INTO LearningObjectives (ObjectiveCode, ObjectiveDescription) VALUES (?,?)",
+                       obj_code, obj_description)
         # commit changes to the database 
         connector.commit()
     except Error as e:

@@ -19,9 +19,7 @@ CREATE TABLE IF NOT EXISTS Faculty (
 -- Programs Table
 CREATE TABLE IF NOT EXISTS Programs (
     ProgramName VARCHAR(255) UNIQUE,
-    ProgramCoordinatorID VARCHAR(10),
-    ProgramCoordinatorName VARCHAR(255),
-    ProgramCoordinatorEmail VARCHAR(255),
+    ProgramCoordinatorID VARCHAR(10), 
     DepartmentCode VARCHAR(4), -- added DepartmentCode
     PRIMARY KEY (ProgramName),
     FOREIGN KEY (ProgramCoordinatorID) REFERENCES Faculty (FacultyID), -- added foreign key for ProgramCoordinatorID
@@ -38,23 +36,15 @@ CREATE TABLE IF NOT EXISTS Courses (
     FOREIGN KEY (DepartmentCode) REFERENCES Departments(DepartmentCode)
 );
 
--- Semesters Table (not neccessarily needed)
-CREATE TABLE IF NOT EXISTS Semesters (
-    SemesterID INT AUTO_INCREMENT,
-    SemesterName VARCHAR(20),
-    PRIMARY KEY (SemesterID)
-);
-
 -- CourseSections Table
 CREATE TABLE IF NOT EXISTS CourseSections (
     SectionID INT AUTO_INCREMENT,
     CourseID VARCHAR(8),
-    SemesterID INT,
+    SemesterName VARCHAR(20),
     FacultyID VARCHAR(10),
     StudentsEnrolled INT,
     PRIMARY KEY (SectionID, CourseID), -- xadded CourseID to key
     FOREIGN KEY (CourseID) REFERENCES Courses(CourseID),
-    FOREIGN KEY (SemesterID) REFERENCES Semesters(SemesterID),
     FOREIGN KEY (FacultyID) REFERENCES Faculty(FacultyID)
 );
 
