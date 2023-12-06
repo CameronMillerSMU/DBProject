@@ -22,33 +22,37 @@ def execute_scripts_from_file(filename):
 
 execute_scripts_from_file("test_schema.sql")
 
-# TODO: data entry for Courses, Sections & Learning objectives / sub-objectives
+# TODO: do checks for data entry - Courses, Sections, LearningObjectives
 
-def enter_course_data(cursor, db_conn, c_id, c_title, c_description, dp_code):
+#
+
+def enter_course_data(cursor, connector, c_id, c_title, c_description, dept_code):
     try:
         #insert data into Courses table
-        cursor.execute("INSERT INTO COURSES (CourseID, CourseTitle, CourseDescription, DepartmentCode) VALUES (?,?,?,?)",
-                   c_id, c_title, c_description, dp_code)
+        cursor.execute("INSERT INTO Courses (CourseID, CourseTitle, CourseDescription, DepartmentCode) VALUES (?,?,?,?)",
+                   c_id, c_title, c_description, dept_code)
         # commit changes to the database 
-        db_conn.commit()
+        connector.commit()
     except Error as e:
-        print(f"The error '{e}' occurred")
+        print(f"Error inserting course data: {e}")
 
-def enter_section_data(cursor, db_conn):
+def enter_section_data(cursor, connector, s_id, c_id, semester_id, f_id, students_enrolled):
     try:
         #insert data into Sections table
-        cursor.execute("")
+        cursor.execute("INSERT INTO CourseSections (SectionID, CourseID, SemesterID, FacultyID, StudentsEnrolled) VALUES (?,?,?,?,?)",
+                       s_id, c_id, semester_id, f_id, students_enrolled)
         # commit changes to the database 
-        db_conn.commit()
+        connector.commit()
     except Error as e:
-        print(f"The error '{e}' occurred")
+        print(f"Error inserting Course Section data: {e}")
 
-def enter_learningObjectives_data(cursor, db_conn):
+def enter_learningObjectives_data(cursor, connector, prog_name, obj_code):
     try:
         #insert data into Learning Objectives table
-        cursor.execute("")
+        cursor.execute("INSERT INTO LearningObjectives (ProgramName, ObjectiveCode) VALUES (?,?)",
+                       prog_name, obj_code)
         # commit changes to the database 
-        db_conn.commit()
+        connector.commit()
     except Error as e:
-        print(f"The error '{e}' occurred")
+        print(f"Error inserting Learning Objectives data: {e}")
  
