@@ -52,23 +52,76 @@ create_tables_from_file_m(cursor, "test_schema.sql", db_conn)
 # learning objectives - no checks needed (check happen outside function in gui)
 ##
 
-def enter_course_data(cursor, connector, c_id, c_title, c_description, dept_code):
+# CHECKS 
+def check_dept_exists(dept_code):
     try:
-        #insert data into Courses table
-        cursor.execute("INSERT INTO Courses (CourseID, CourseTitle, CourseDescription, DepartmentCode) VALUES (?,?,?,?)",
-                   c_id, c_title, c_description, dept_code)
+        com = "SELECT * FROM Department WHERE DepartmentCode = '%s'" % (dept_code) 
+        cursor.execute(com)
+        
+        if cursor.fetchall():
+            return True
+        
+        print("Department does not exist. Please check department code.")
+        return False
+    except Error as e:
+        print(f"Error executing Department Select: {e}")
+
+def check_fal_exists(fal_id):
+    try:
+        com = "SELECT * FROM Faculty WHERE FacultyID = '%s'" % (fal_id) 
+        cursor.execute(com)
+        
+        if cursor.fetchall():
+            return True
+        
+        print("Faculty member does not exist. Please check faculty id")
+        return False
+    except Error as e:
+        print(f"Error executing Faculty Select: {e}")
+
+def check_course_exists(course_id):
+    try:
+        com = "SELECT * FROM Course WHERE CourseID = '%s'" % (course_id) 
+        cursor.execute(com)
+        
+        if cursor.fetchall():
+            return True
+        
+        print("Course does not exist. Please check Course ID")
+        return False
+    except Error as e:
+        print(f"Error executing Course Select: {e}")
+
+# ENTER DATA INTO TABLES
+def enter_course_data(cursor, connector, course_id, course_title, c_description, dept_code):
+    # check if the dept exists - if not, return error
+    if not check_dept_exists(dept_code):
+        return False
+    
+    try:
+        #insert data into Course table
+        cursor.execute("INSERT INTO Course (CourseID, CourseTitle, CourseDescription, DepartmentCode) VALUES (?,?,?,?)",
+                   course_id, course_title, c_description, dept_code)
         # commit changes to the database 
         connector.commit()
+        return True
     except Error as e:
         print(f"Error inserting course data: {e}")
 
-def enter_section_data(cursor, connector, s_id, c_id, semester_id, f_id, students_enrolled):
+def enter_section_data(cursor, connector, section_id, course_id, semester, year, f_id, students_enrolled):
+    #check if the course and faculty member exist 
+    if not check_course_exists(course_id):
+        return False 
+    if not check_fal_exists(f_id):
+        return False
+
     try:
         #insert data into Sections table
-        cursor.execute("INSERT INTO CourseSections (SectionID, CourseID, SemesterID, FacultyID, StudentsEnrolled) VALUES (?,?,?,?,?)",
-                       s_id, c_id, semester_id, f_id, students_enrolled)
+        cursor.execute("INSERT INTO CourseSections (SectionID, CourseID, SemesterName, CourseYear, FacultyID, StudentsEnrolled) VALUES (?,?,?,?,?,?)",
+                       section_id, course_id, semester, year, f_id, students_enrolled)
         # commit changes to the database 
         connector.commit()
+        return True
     except Error as e:
         print(f"Error inserting Course Section data: {e}")
 
