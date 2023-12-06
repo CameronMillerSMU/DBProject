@@ -65,3 +65,22 @@ def create_tables_from_file(cursor, filename, connection):
 #             connection.commit()
 #         else:
 #             print(f"The error '{e}' occurred")
+
+
+tables = ["Program", "Department", "Faculty", "Course", "Section", 
+          "LearningObjective", "SubObjective", "CourseEval",
+          "SectionEval", "ProgramObjective", "ProgramCourse"]
+
+
+def clear_database(cursor, connection, tableList):
+    try:
+        cursor.execute("SET FOREIGN_KEY_CHECKS = 0")
+        for table in tableList:
+            sqlcom = "DROP TABLE IF EXISTS %s" % (table)
+            cursor.execute(sqlcom)
+        cursor.execute("SET FOREIGN_KEY_CHECKS = 1")
+
+        print("Database cleared successfully")
+    except Error as e:
+        print(f"The error '{e} occurred'")
+    connection.commit()
