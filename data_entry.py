@@ -49,7 +49,7 @@ create_tables_from_file_m(cursor, "test_schema.sql", db_conn)
 #   - does the course and faculty member exist 
 #       - if so, continue
 #       - if not, error (course or faculty member does not exist
-# learning objectives - no checks needed (check happen outsode function in gui)
+# learning objectives - no checks needed (check happen outside function in gui)
 ##
 
 def enter_course_data(cursor, connector, c_id, c_title, c_description, dept_code):
