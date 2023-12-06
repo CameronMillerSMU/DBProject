@@ -67,6 +67,14 @@ CREATE TABLE IF NOT EXISTS SubObjective (
     FOREIGN KEY (ObjectiveCode) REFERENCES LearningObjective(ObjectiveCode)
 );
 
+-- ProgramCourse Table
+CREATE TABLE IF NOT EXISTS ProgramCourse (
+    CourseID VARCHAR(8),
+    ProgramName VARCHAR(255),
+    PRIMARY KEY (ProgramName),
+    FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
+    FOREIGN KEY (ProgramName) REFERENCES Program(ProgramName)
+);
 -- CourseEval Table 
 CREATE TABLE IF NOT EXISTS CourseEval (
     CourseID VARCHAR(8),

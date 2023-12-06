@@ -36,18 +36,32 @@ def create_connection(host_name, user_name, user_password, database_name):
 
     return connection
 
-
-def create_tables_from_file(cursor, file_name, connection):
+def create_tables_from_file(cursor, filename, connection):
+    '''Note: if schema does not inlcude "IF NOT EXISTS" error occurs
+    if the table already exists in the database
+    '''
     try:
-        cursor.execute("SELECT 1 FROM Team LIMIT 1")
+        with open(filename,'r') as file:
+            sql_script = file.read()
+            
+        for result in cursor.execute(sql_script, multi=True):
+            pass
     except Error as e:
-        if "Table 'Team' doesn't exist" in str(e):
-            with open("schema.sql", 'r') as sql_file:
-                sql_commands = sql_file.read().split(';')
-                for sql_command in sql_commands:
-                    sql_command = sql_command.strip()
-                    if sql_command:
-                        cursor.execute(sql_command)
-            connection.commit()
-        else:
-            print(f"The error '{e}' occurred")
+        print(f"The error '{e} occurred'")
+    
+    connection.commit()
+
+# def create_tables_from_file(cursor, file_name, connection):
+#     try:
+#         cursor.execute("SELECT 1 FROM Team LIMIT 1")
+#     except Error as e:
+#         if "Table 'Team' doesn't exist" in str(e):
+#             with open("schema.sql", 'r') as sql_file:
+#                 sql_commands = sql_file.read().split(';')
+#                 for sql_command in sql_commands:
+#                     sql_command = sql_command.strip()
+#                     if sql_command:
+#                         cursor.execute(sql_command)
+#             connection.commit()
+#         else:
+#             print(f"The error '{e}' occurred")
