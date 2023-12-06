@@ -5,7 +5,7 @@ from mysql.connector import Error
 import re
 
 """CHANGE THIS TO RUN"""
-dbConn = create_connection("localhost", "root", "passwd", "progDB")
+dbConn = create_connection("localhost", "root", "databases2023", "bruh")
 cursor = dbConn.cursor()
 create_database(cursor, "progDB")
 create_tables_from_file(cursor, "test_schema.sql", dbConn)
