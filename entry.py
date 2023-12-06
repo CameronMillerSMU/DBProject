@@ -218,7 +218,6 @@ def enter_course_info(cursor, connection, co_id, co_title, co_desc, dept_code):
         print(f"Error inserting course data: {e}")
         return False
     
-# ENTER DATA INTO TABLES
 def enter_course_data(cursor, connector, course_id, course_title, c_description, dept_code):
     # check if the dept exists - if not, return error
     if not check_dept_exists(dept_code):
@@ -363,7 +362,6 @@ def handle_course_entry(cursor, connection, co_id, co_title, co_desc, dept_code)
     if enter_course_info(cursor, connection, str(co_id), str(co_title), str(co_desc), str(dept_code)):
         return "Course Info Stored Successfully"
     
-# Functions to Handle User Input
 def handle_course_entry(cursor, connector, course_id, course_title, c_description, dept_code):
     if enter_course_data(cursor, connector, str(course_id), str(course_title), str(c_description), str(dept_code)):
         return "Course data entered successfully."
@@ -392,7 +390,7 @@ def handle_subObjective_entry(cursor, connector, obj_code, subObj_description):
         return "Error entering Sub-objective data. Please try again."
     
 
-''' Populate Functions '''
+''' Test Populate Functions ''' # do not need to use functions 
 def populate_course_table(cursor, connection):
     dummy_courses = [
         ("CS010001", "Introduction to Computer Science", "Fundamental concepts of programming.", "CS01"),
