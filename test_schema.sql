@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS Faculty (
     FacultyRank VARCHAR(20), -- full, associate, assistant, adjunct
     DepartmentCode VARCHAR(4),
     PRIMARY KEY (FacultyID),
-    FOREIGN KEY (DepartmentCode) REFERENCES Departments(DepartmentCode)
+    FOREIGN KEY (DepartmentCode) REFERENCES Departments(DepartmentCode),
     CHECK (FacultyRank IN ('Full', 'Associate', 'Assistant', 'Adjunct'))
 );
 
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS SectionObjectives (
 --      Engineering it will be CS 1100, CE 1100, CE 2200. Notice that a course may be associated with multiple programs
 
 -- ProgramCourses Table 
-CREATE TABLE IF NOT EXISTS ProgramCourses (
-    ProgramName VARCHAR(255) UNIQUE,
-    CourseID VARCHAR(8),
-);
+-- CREATE TABLE IF NOT EXISTS ProgramCourses (
+--     ProgramName VARCHAR(255) UNIQUE,
+--     CourseID VARCHAR(8),
+-- );

@@ -3,11 +3,11 @@ from project import *
 db_conn = create_connection("localhost", "root", "beepboop", "progDB")
 cursor = db_conn.cursor()
 
-create_database(cursor, "DBprog")
+# create_database(cursor, "DBprog")
 
 tables = ["Programs", "Departments", "Faculty", "Courses",
-           "CourseSections", "LearningObjectives", 
-          "ProgramObjectives", "SectionObjectives"]
+          "Semesters", "CourseSections", "LearningObjectives", 
+          "ProgramObjectives", "SectionObjectives", "SubObjectives"]
 
 def clear_database(cursor, connection, tableList):
     try:
@@ -22,7 +22,7 @@ def clear_database(cursor, connection, tableList):
         print(f"The error '{e} occurred'")
     connection.commit()
 
-# clear_database(cursor, db_conn, tables)
+clear_database(cursor, db_conn, tables)
 
 #create the tables from file 
 def create_tables_from_file_m(cursor, filename, connection):
@@ -81,4 +81,7 @@ def enter_learningObjectives_data(cursor, connector, obj_code, obj_description):
         connector.commit()
     except Error as e:
         print(f"Error inserting Learning Objectives data: {e}")
+
+
+
  
