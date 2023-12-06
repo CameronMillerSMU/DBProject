@@ -41,9 +41,10 @@ CREATE TABLE IF NOT EXISTS CourseSections (
     SectionID INT AUTO_INCREMENT,
     CourseID VARCHAR(8),
     SemesterName VARCHAR(20),
+    courseYear YEAR,
     FacultyID VARCHAR(10),
     StudentsEnrolled INT,
-    PRIMARY KEY (SectionID, CourseID), -- xadded CourseID to key
+    PRIMARY KEY (SectionID, CourseID), -- added CourseID to key
     FOREIGN KEY (CourseID) REFERENCES Courses(CourseID),
     FOREIGN KEY (FacultyID) REFERENCES Faculty(FacultyID)
 );
