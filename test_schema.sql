@@ -10,10 +10,11 @@ CREATE TABLE IF NOT EXISTS Faculty (
     FacultyID VARCHAR(10) UNIQUE,
     FacultyName VARCHAR(255),
     FacultyEmail VARCHAR(255),
-    FacultyRank VARCHAR(20),
+    FacultyRank VARCHAR(20), -- full, associate, assistant, adjunct
     DepartmentCode VARCHAR(4),
     PRIMARY KEY (FacultyID),
     FOREIGN KEY (DepartmentCode) REFERENCES Departments(DepartmentCode)
+    CHECK (FacultyRank IN ('Full', 'Associate', 'Assistant', 'Adjunct'))
 );
 
 -- Programs Table
@@ -51,19 +52,32 @@ CREATE TABLE IF NOT EXISTS CourseSections (
 
 -- LearningObjectives Table
 CREATE TABLE IF NOT EXISTS LearningObjectives (
-    ObjectiveCode VARCHAR(10) UNIQUE,
+    ObjectiveCode VARCHAR(10), -- removed unique  
     ObjectiveDescription TEXT,
-    PRIMARY KEY (ObjectiveCode)
+    ProgramName VARCHAR(255),
+    PRIMARY KEY (ObjectiveCode, ProgramName),
+    FOREIGN KEY (ProgramName) REFERENCES Programs(ProgramName)
 );
 
--- ProgramObjectives Table
-CREATE TABLE IF NOT EXISTS ProgramObjectives (
+-- SubObjectives Table - added new table 
+CREATE TABLE IF NOT EXISTS SubObjectives (
+    SubObjectiveCode VARCHAR(10),
+    SubObjectiveDescription TEXT,
     ProgramName VARCHAR(255),
     ObjectiveCode VARCHAR(10),
-    PRIMARY KEY (ProgramName, ObjectiveCode),
+    PRIMARY KEY (SubObjectiveCode, ObjectiveCode, ProgramName),
     FOREIGN KEY (ProgramName) REFERENCES Programs(ProgramName),
     FOREIGN KEY (ObjectiveCode) REFERENCES LearningObjectives(ObjectiveCode)
 );
+
+-- ProgramObjectives Table - not needed 
+-- CREATE TABLE IF NOT EXISTS ProgramObjectives (
+--     ProgramName VARCHAR(255),
+--     ObjectiveCode VARCHAR(10),
+--     PRIMARY KEY (ProgramName, ObjectiveCode),
+--     FOREIGN KEY (ProgramName) REFERENCES Programs(ProgramName),
+--     FOREIGN KEY (ObjectiveCode) REFERENCES LearningObjectives(ObjectiveCode)
+-- );
 
 -- SectionObjectives Table
 CREATE TABLE IF NOT EXISTS SectionObjectives (
@@ -83,3 +97,9 @@ CREATE TABLE IF NOT EXISTS SectionObjectives (
 --      For each program, there are a set of courses that is associated with it that will be used for evaluation.
 --      For example, for the CS program, it may be the course CS 1100, CS 1200, CS 1300. And for Computer
 --      Engineering it will be CS 1100, CE 1100, CE 2200. Notice that a course may be associated with multiple programs
+
+-- ProgramCourses Table 
+CREATE TABLE IF NOT EXISTS ProgramCourses (
+    ProgramName VARCHAR(255) UNIQUE,
+    CourseID VARCHAR(8),
+);
