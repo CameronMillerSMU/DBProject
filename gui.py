@@ -1,104 +1,112 @@
 import tkinter as tk
+from tkinter import ttk
+# from queries import *  # Assuming you have your query functions in a 'queries' module
+# from entry import *    # Assuming you have your entry functions in an 'entry' module
 
-def on_entry_button_click():
-    update_label("Entry Button clicked!")
-    show_dropdown(1)
+class DatabaseGUI:
+    def __init__(self, master, cursor):
+        self.master = master
+        self.master.title("Database GUI")
+        self.cursor = cursor
+        self.option_widgets = {}
 
-def on_query_button_click():
-    update_label("Query Button clicked!")
-    show_dropdown(2)
+        self.selection_label = tk.Label(master, text="Select Action:")
+        self.selection_label.pack()
 
-def update_label(message):
-    entry_text = entry.get()
-    label.config(text=f"{message} Entered text: {entry_text}, Selected option: {var.get()}, Selected dropdown: {dropdown_var.get()}")
+        self.action_var = tk.StringVar()
+        self.action_var.set("Select Action")
 
-def update_layout():
-    selected_option = var.get()
+        self.action_dropdown = ttk.Combobox(master, textvariable=self.action_var, values=["Entry", "Query"])
+        self.action_dropdown.pack()
 
-    # Hide all widgets
-    entry_button.grid_forget()
-    query_button.grid_forget()
-    entry.grid_forget()
-    entry_dropdown.grid_forget()
-    query_dropdown.grid_forget()
+        self.action_button = tk.Button(master, text="Select", command=self.handle_selection)
+        self.action_button.pack()
 
-    # Show widgets based on the selected option
-    if selected_option == "Department":
-        entry_button.grid(row=1, column=0, padx=5, pady=10, sticky="ew")
-        entry.grid(row=2, column=0, padx=5, pady=10, sticky="ew")
-    elif selected_option == "Faculty":
-        query_button.grid(row=1, column=0, padx=5, pady=10, sticky="ew")
-    elif selected_option == "Program":
-        entry_button.grid(row=1, column=0, padx=5, pady=10, sticky="ew")
-        entry.grid(row=2, column=0, padx=5, pady=10, sticky="ew")
-    elif selected_option == "Course":
-        query_button.grid(row=1, column=0, padx=5, pady=10, sticky="ew")
-        entry.grid(row=2, column=0, padx=5, pady=10, sticky="ew")
-    elif selected_option == "Section":
-        entry_button.grid(row=1, column=0, padx=5, pady=10, sticky="ew")
-        query_button.grid(row=2, column=0, padx=5, pady=10, sticky="ew")
-    elif selected_option == "Objectives":
-        entry_button.grid(row=1, column=0, padx=5, pady=10, sticky="ew")
-        query_button.grid(row=2, column=0, padx=5, pady=10, sticky="ew")
-        entry.grid(row=3, column=0, padx=5, pady=10, sticky="ew")
+        self.value_label = tk.Label(master, text="Value Returned:")
+        self.value_label.pack()
 
-def show_dropdown(selected_button):
-    if selected_button == 1:
-        entry_dropdown.grid(row=3, column=1, padx=5, pady=10, sticky="ew")
-        query_dropdown.grid_forget()
-    elif selected_button == 2:
-        query_dropdown.grid(row=3, column=1, padx=5, pady=10, sticky="ew")
-        entry_dropdown.grid_forget()
+        self.value_returned = tk.Label(master, text="")
+        self.value_returned.pack()
+
+    def handle_selection(self):
+        # Clear previously added widgets
+        for widget in self.option_widgets.values():
+            widget.destroy()
+
+        self.value_returned.config(text="")  # Clear the value returned label
+
+        selected_action = self.action_var.get()
+
+        if selected_action == "Entry":
+            self.show_entry_options()
+        elif selected_action == "Query":
+            self.show_query_options()
+
+    def show_entry_options(self):
+        entry_options = ["Course", "Section", "LearningObjective", "Department", "Faculty", "Program", "Evaluation", "Assign Course", "Assign Learning Objective"]
+        self.show_options(entry_options)
+
+    def show_query_options(self):
+        query_options = ["Department", "Program", "Semester", "Academic Year"]
+        self.show_options(query_options)
+
+    def show_options(self, options):
+        option_label = tk.Label(self.master, text="Select Option:")
+        option_label.pack()
+
+        option_var = tk.StringVar()
+        option_var.set("Select Option")
+
+        option_dropdown = ttk.Combobox(self.master, textvariable=option_var, values=options)
+        option_dropdown.pack()
+
+        option_button = tk.Button(self.master, text="Submit", command=lambda: self.handle_option(option_var.get(), option_dropdown.get()))
+        option_button.pack()
+
+        # Keep track of added widgets for clearing later
+        self.option_widgets["option_label"] = option_label
+        self.option_widgets["option_dropdown"] = option_dropdown
+        self.option_widgets["option_button"] = option_button
+
+    def handle_option(self, selected_option, selected_value):
+        # Clear previously added widgets except for the first dropdown
+        for key, widget in self.option_widgets.items():
+            if key != "option_dropdown":
+                widget.destroy()
+
+        if self.action_var.get() == "Query" and selected_option == "Department":
+            self.show_department_query_form(selected_value)
+
+        # Add more conditions for other combinations of action and selected option
+
+    def show_department_query_form(self, selected_value):
+        department_code_label = tk.Label(self.master, text=f"{selected_value} Code:")
+        department_code_label.pack()
+
+        department_code_entry = tk.Entry(self.master)
+        department_code_entry.pack()
+
+        execute_button = tk.Button(self.master, text="Execute", command=lambda: self.handle_department_query(selected_value, department_code_entry.get()))
+        execute_button.pack()
+
+        # Keep track of added widgets for clearing later
+        self.option_widgets["department_code_label"] = department_code_label
+        self.option_widgets["department_code_entry"] = department_code_entry
+        self.option_widgets["execute_button"] = execute_button
+
+    def handle_department_query(self, selected_value, department_code):
+        # Implement the query logic here using the entered department code
+        result = get_department(self.cursor, department_code)  # Assuming get_department is a function in your 'queries' module
+        self.display_result(result)
+
+    def display_result(self, result):
+        if result is not None:
+            self.value_returned.config(text=str(result))
+        else:
+            self.value_returned.config(text="No data found.")
 
 if __name__ == "__main__":
-    # Create the main application window
-    app = tk.Tk()
-    app.title("DB Project")
+    root = tk.Tk()
 
-    # Configure column and row weights to make the app flexible
-    app.columnconfigure(0, weight=1)
-    app.columnconfigure(1, weight=1)
-    app.rowconfigure(0, weight=1)
-    app.rowconfigure(1, weight=1)
-    app.rowconfigure(2, weight=1)
-    app.rowconfigure(3, weight=1)
-    app.rowconfigure(4, weight=1)
-
-    # Create an unchangeable label at the top
-    unchangeable_label = tk.Label(app, text="Course Catalog Database", font=("Times New Roman", 20), fg="blue")
-    unchangeable_label.grid(row=0, column=0, padx=5, pady=10, columnspan=2, sticky="ew")
-    unchangeable_label.place(anchor="nw")
-
-    # Create the Entry button widget
-    entry_button = tk.Button(app, text="Entry", command=on_entry_button_click)
-    entry_button.grid(row=1, column=0, padx=5, pady=10, sticky="ew")
-
-    # Create the Query button widget
-    query_button = tk.Button(app, text="Query", command=on_query_button_click)
-    query_button.grid(row=1, column=1, padx=5, pady=10, sticky="ew")
-
-    # Create a label widget at the bottom right
-    label = tk.Label(app, text="Mode", font=("Times New Roman", 11), fg="Black")
-    label.grid(row=4, column=1, padx=5, pady=10, sticky="sew")  # Updated sticky="sew" for bottom right
-
-    # Create a variable to store the selected option
-    var = tk.StringVar(app)
-
-    # Create a text input box
-    entry = tk.Entry(app)
-    entry.grid(row=3, column=0, padx=5, pady=10, sticky="ew")
-
-    # Create a variable to store the selected dropdown option
-    dropdown_var = tk.StringVar(app)
-
-    # Create a dropdown menu for the Entry button
-    entry_options = ["Department", "Faculty", "Program", "Course", "Section", "Objectives"]
-    entry_dropdown = tk.OptionMenu(app, dropdown_var, *entry_options)
-    entry_dropdown.grid(row=3, column=1, padx=5, pady=10, sticky="ew")
-
-    # Create a dropdown menu for the Query button
-    query_options = ["Department", "Program", "Semester & Program", "Academic Year"]
-    query_dropdown = tk.OptionMenu(app, dropdown_var, *query_options)
-
-    # Start the main event loop
-    app.mainloop()
+    gui = DatabaseGUI(root, None)
+    root.mainloop()
