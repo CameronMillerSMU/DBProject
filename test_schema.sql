@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS Programs (
     ProgramCoordinatorName VARCHAR(255),
     ProgramCoordinatorEmail VARCHAR(255),
     DepartmentCode VARCHAR(4), -- added DepartmentCode
-    PRIMARY KEY (ProgramName)
-    FOREIGN KEY (ProgramCoordinatorID) REFERENCES Faculty (FacultyID) -- added foreign key for ProgramCoordinatorID
+    PRIMARY KEY (ProgramName),
+    FOREIGN KEY (ProgramCoordinatorID) REFERENCES Faculty (FacultyID), -- added foreign key for ProgramCoordinatorID
     FOREIGN KEY (DepartmentCode) REFERENCES Departments (DepartmentCode) -- added foreign key for DepartmentCode
 );
 
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS CourseSections (
     SemesterID INT,
     FacultyID VARCHAR(10),
     StudentsEnrolled INT,
-    PRIMARY KEY (SectionID, CourseID), --added CourseID to key
+    PRIMARY KEY (SectionID, CourseID), -- added CourseID to key
     FOREIGN KEY (CourseID) REFERENCES Courses(CourseID),
     FOREIGN KEY (SemesterID) REFERENCES Semesters(SemesterID),
     FOREIGN KEY (FacultyID) REFERENCES Faculty(FacultyID)

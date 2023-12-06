@@ -4,6 +4,23 @@ db_conn = create_connection("localhost", "root", "beepboop", "DBprog")
 cursor = db_conn.cursor()
 create_database(cursor, "DBprog")
 
+tables = ["Programs", "Departments", "Faculty", "Courses",
+          "Semesters", "CourseSections", "LearningObjectives", 
+          "ProgramObjectives", "SectionObjectives"]
+
+def clear_database(cursor, connection, tableList):
+    try:
+        cursor.execute("SET FOREIGN_KEY_CHECKS = 0")
+        for table in tableList:
+            sqlcom = "DROP TABLE IF EXISTS %s" % (table)
+            cursor.execute(sqlcom)
+        cursor.execute("SET FOREIGN_KEY_CHECKS = 1")
+    except Error as e:
+        print(f"The error '{e} occurred'")
+    connection.commit()
+
+# clear_database(cursor, db_conn, tables)
+
 #todo: create the tables from file 
 def execute_scripts_from_file(filename):
     file = open(filename, 'r')
