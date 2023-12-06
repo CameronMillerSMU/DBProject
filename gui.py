@@ -14,8 +14,12 @@ def on_query_button_click():
 app = tk.Tk()
 app.title("DB Project")
 
+# Create an unchangeable label at the top
+unchangeable_label = tk.Label(app, text="Course Catalog Database", font=("Times New Roman", 50), fg="blue")
+unchangeable_label.pack()
+
 # Create a label widget
-label = tk.Label(app, text="Course Catalog Database", font=("Times New Roman", 20), fg="blue")
+label = tk.Label(app, text="Mode", font=("Times New Roman", 20), fg="black")
 label.pack()  # Pack the label into the window
 
 # Create the Entry button widget
@@ -30,7 +34,7 @@ query_button.pack(padx=5, pady=20, side=tk.LEFT)  # Pack the button into the win
 var = tk.StringVar(app)
 
 # Create a dropdown menu
-options = ["Option 1", "Option 2", "Option 3"]
+options = ["Department", "Faculty", "Program", "Course", "Section", "Objectives"]
 dropdown = tk.OptionMenu(app, var, *options)
 dropdown.pack()
 
