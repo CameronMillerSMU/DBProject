@@ -1,10 +1,10 @@
 from project import *
 import re
 
-db_conn = create_connection("localhost", "root", "beepboop", "progDB")
+db_conn = create_connection("localhost", "root", "123456", "progDB")
 cursor = db_conn.cursor()
 
-create_database(cursor, "DBprog")
+create_database(cursor, "progDB")
 
 tables = ["Program", "Department", "Faculty", "Course", "Section", 
           "LearningObjective", "SubObjective", "CourseEval",

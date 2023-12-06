@@ -4,8 +4,20 @@ import mysql.connector as sql
 from mysql.connector import Error
 import re
 
+# connection = sql.connect(
+#         host="localhost",
+#         user="root",
+#         password="123456789",
+#         database="dbprog"
+#     )
+#
+# cursor = connection.cursor(buffered=True)
+# cursor.execute("CREATE DATABASE IF NOT EXISTS dbprog")
+# cursor.execute("USE dbprog")
+
+
 """CHANGE THIS TO RUN"""
-dbConn = create_connection("localhost", "root", "databases2023", "bruh")
+dbConn = create_connection("localhost", "root", "123456", "progDB")
 cursor = dbConn.cursor()
 create_database(cursor, "progDB")
 create_tables_from_file(cursor, "test_schema.sql", dbConn)

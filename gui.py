@@ -38,36 +38,37 @@ def update_layout():
         query_button.grid(row=2, column=0, padx=5, pady=10, sticky="e")
         entry.grid(row=3, column=0, padx=5, pady=10, sticky="e")
 
-# Create the main application window
-app = tk.Tk()
-app.title("DB Project")
+if __name__ == "__main__":
+    # Create the main application window
+    app = tk.Tk()
+    app.title("DB Project")
 
-# Create an unchangeable label at the top
-unchangeable_label = tk.Label(app, text="Course Catalog Database", font=("Times New Roman", 20), fg="blue")
-unchangeable_label.grid(row=0, column=0, padx=5, pady=10, columnspan=2, sticky="e")
+    # Create an unchangeable label at the top
+    unchangeable_label = tk.Label(app, text="Course Catalog Database", font=("Times New Roman", 20), fg="blue")
+    unchangeable_label.grid(row=0, column=0, padx=5, pady=10, columnspan=2, sticky="e")
 
-# Create a label widget
-label = tk.Label(app, text="Mode", font=("Times New Roman", 20), fg="black")
-label.grid(row=1, column=0, padx=5, pady=10, sticky="e")
+    # Create a label widget
+    label = tk.Label(app, text="Mode", font=("Times New Roman", 20), fg="black")
+    label.grid(row=1, column=0, padx=5, pady=10, sticky="e")
 
-# Create the Entry button widget
-entry_button = tk.Button(app, text="Entry", command=on_entry_button_click)
-query_button = tk.Button(app, text="Query", command=on_query_button_click)
+    # Create the Entry button widget
+    entry_button = tk.Button(app, text="Entry", command=on_entry_button_click)
+    query_button = tk.Button(app, text="Query", command=on_query_button_click)
 
-# Create a variable to store the selected option
-var = tk.StringVar(app)
+    # Create a variable to store the selected option
+    var = tk.StringVar(app)
 
-# Create a dropdown menu
-options = ["Department", "Faculty", "Program", "Course", "Section", "Objectives"]
-dropdown = tk.OptionMenu(app, var, *options, command=lambda x: update_layout())
-dropdown.grid(row=1, column=1, padx=5, pady=10, sticky="e")
+    # Create a dropdown menu
+    options = ["Department", "Faculty", "Program", "Course", "Section", "Objectives"]
+    dropdown = tk.OptionMenu(app, var, *options, command=lambda x: update_layout())
+    dropdown.grid(row=1, column=1, padx=5, pady=10, sticky="e")
 
-# Set a default option
-var.set(options[0])
+    # Set a default option
+    var.set(options[0])
 
-# Create a text input box
-entry = tk.Entry(app)
-entry.grid(row=2, column=1, padx=5, pady=10, sticky="e")
+    # Create a text input box
+    entry = tk.Entry(app)
+    entry.grid(row=2, column=1, padx=5, pady=10, sticky="e")
 
-# Start the main event loop
-app.mainloop()
+    # Start the main event loop
+    app.mainloop()

@@ -22,19 +22,23 @@ def create_table(cursor, table_name):
         print(f"The error '{e}' occurred")
 
 
+# Inside create_connection function
 def create_connection(host_name, user_name, user_password, database_name):
     connection = None
     try:
+        print(f"Connecting to database '{database_name}'...")
         connection = sql.connect(
             host=host_name,
             user=user_name,
             password=user_password,
             database=database_name
         )
+        print("Connection successful!")
     except Error as e:
         print(f"The error '{e}' occurred")
 
     return connection
+
 
 def create_tables_from_file(cursor, filename, connection):
     '''Note: if schema does not inlcude "IF NOT EXISTS" error occurs

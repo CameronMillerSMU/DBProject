@@ -1,50 +1,156 @@
-from entry import create_connection, create_tables_from_file
+import mysql.connector as sql
+from mysql.connector import Error
 
-# Database connection parameters
-host = "localhost"
-user = "root"
-password = "databases2023"
-database_name = "projectDB"
+def create_connection(host_name, user_name, user_password):
+    connection = None
+    try:
+        connection = sql.connect(
+            host=host_name,
+            user=user_name,
+            password=user_password
+        )
+        print("Connection to MySQL server successful!")
+    except Error as e:
+        print(f"The error '{e}' occurred")
 
-# Create a connection to the database
-db_connection = create_connection(host, user, password, database_name)
+    return connection
 
-# Create tables if they don't exist
-create_tables_from_file(db_connection.cursor(), "test_schema.sql", db_connection)
+def create_database(cursor, database_name):
+    try:
+        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {database_name}")
+        print(f"Database '{database_name}' created successfully")
+    except Error as e:
+        print(f"The error '{e}' occurred")
 
-# Example data for testing
-department_data = [
-    ("CS01", "Computer Science"),
-    ("ENG01", "Engineering"),
-    # Add more departments as needed
-]
+def create_tables_from_file(cursor, filename, connection):
+    try:
+        with open(filename, 'r') as file:
+            sql_script = file.read()
 
-faculty_data = [
-    ("F001", "John Doe", "john.doe@example.com", "CS01", "Professor"),
-    ("F002", "Jane Smith", "jane.smith@example.com", "ENG01", "Associate Professor"),
-    # Add more faculty members as needed
-]
+        for result in cursor.execute(sql_script, multi=True):
+            pass
+        print("Tables created successfully")
+    except Error as e:
+        print(f"The error '{e}' occurred")
 
-program_data = [
-    ("Computer Science Program", "F001", "CS01"),
-    ("Engineering Program", "F002", "ENG01"),
-    # Add more programs as needed
-]
+def insert_sample_data(cursor, connection):
+    try:
+        # Insert sample data into the tables
+        # You can customize these INSERT statements with your own data
+        cursor.execute("INSERT INTO Department (DepartmentCode, DepartmentName) VALUES ('COMP', 'Computer Science')")
+        cursor.execute("INSERT INTO Faculty (FacultyID, FacultyName, FacultyEmail, FacultyRank, DepartmentCode) VALUES ('F101', 'John Doe', 'john@example.com', 'Professor', 'COMP')")
+        cursor.execute("INSERT INTO Course (CourseID, CourseTitle, CourseDescription, DepartmentCode) VALUES ('CSCI101', 'Introduction to CS', 'Introductory course', 'COMP')")
+        cursor.execute("INSERT INTO CourseSections (CourseID, SemesterName, CourseYear, FacultyID, StudentsEnrolled) VALUES ('CSCI101', 'Fall', 2023, 'F101', 30)")
 
-# Insert data into the database
-for dept_code, dept_name in department_data:
-    handle_department_entry(db_connection.cursor(), db_connection, dept_code, dept_name)
+        connection.commit()
+        print("Sample data inserted successfully")
+    except Error as e:
+        print(f"The error '{e}' occurred")
 
-for fac_id, fac_name, fac_email, dept_code, fac_rank in faculty_data:
-    handle_faculty_entry(db_connection.cursor(), db_connection, fac_id, fac_name, fac_email, dept_code, fac_rank)
+def main():
+    host = "localhost"
+    user = "root"
+    password = "123456"
+    database_name = "progDB"
 
-for prog_name, pc_id, dept_code in program_data:
-    handle_program_entry(db_connection.cursor(), db_connection, prog_name, pc_id, dept_code)
+    # Create a connection and a cursor
+    connection = create_connection(host, user, password)
+    cursor = connection.cursor()
 
-# Commit changes to the database
-db_connection.commit()
+    # Create the database
+    create_database(cursor, database_name)
 
-# Close the database connection
-db_connection.close()
+    # Connect to the created database
+    connection = create_connection(host, user, password, database_name)
+    cursor = connection.cursor()
 
-print("Database populated successfully.")
+    # Execute the SQL script to create tables
+    create_tables_from_file(cursor, "test_schema.sql", connection)
+
+    # Insert sample data
+    insert_sample_data(cursor, connection)
+
+    # Clean up: Close the connection
+    cursor.close()
+    connection.close()
+
+if __name__ == "__main__":
+    main()
+import mysql.connector as sql
+from mysql.connector import Error
+
+def create_connection(host_name, user_name, user_password):
+    connection = None
+    try:
+        connection = sql.connect(
+            host=host_name,
+            user=user_name,
+            password=user_password
+        )
+        print("Connection to MySQL server successful!")
+    except Error as e:
+        print(f"The error '{e}' occurred")
+
+    return connection
+
+def create_database(cursor, database_name):
+    try:
+        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {database_name}")
+        print(f"Database '{database_name}' created successfully")
+    except Error as e:
+        print(f"The error '{e}' occurred")
+
+def create_tables_from_file(cursor, filename, connection):
+    try:
+        with open(filename, 'r') as file:
+            sql_script = file.read()
+
+        for result in cursor.execute(sql_script, multi=True):
+            pass
+        print("Tables created successfully")
+    except Error as e:
+        print(f"The error '{e}' occurred")
+
+def insert_sample_data(cursor, connection):
+    try:
+        # Insert sample data into the tables
+        # You can customize these INSERT statements with your own data
+        cursor.execute("INSERT INTO Department (DepartmentCode, DepartmentName) VALUES ('COMP', 'Computer Science')")
+        cursor.execute("INSERT INTO Faculty (FacultyID, FacultyName, FacultyEmail, FacultyRank, DepartmentCode) VALUES ('F101', 'John Doe', 'john@example.com', 'Professor', 'COMP')")
+        cursor.execute("INSERT INTO Course (CourseID, CourseTitle, CourseDescription, DepartmentCode) VALUES ('CSCI101', 'Introduction to CS', 'Introductory course', 'COMP')")
+        cursor.execute("INSERT INTO CourseSections (CourseID, SemesterName, CourseYear, FacultyID, StudentsEnrolled) VALUES ('CSCI101', 'Fall', 2023, 'F101', 30)")
+
+        connection.commit()
+        print("Sample data inserted successfully")
+    except Error as e:
+        print(f"The error '{e}' occurred")
+
+def main():
+    host = "localhost"
+    user = "root"
+    password = "123456"
+    database_name = "progDB"
+
+    # Create a connection and a cursor
+    connection = create_connection(host, user, password)
+    cursor = connection.cursor()
+
+    # Create the database
+    create_database(cursor, database_name)
+
+    # Connect to the created database
+    connection = create_connection(host, user, password, database_name)
+    cursor = connection.cursor()
+
+    # Execute the SQL script to create tables
+    create_tables_from_file(cursor, "test_schema.sql", connection)
+
+    # Insert sample data
+    insert_sample_data(cursor, connection)
+
+    # Clean up: Close the connection
+    cursor.close()
+    connection.close()
+
+if __name__ == "__main__":
+    main()
