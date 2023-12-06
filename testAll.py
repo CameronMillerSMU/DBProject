@@ -411,4 +411,4 @@ def driver():
     #handle_course_entry(cursor, dbConn, "CS1111", "Test Course", "hello this course is for dunces like you", "0000")
 
 
-#driver()
+driver()
