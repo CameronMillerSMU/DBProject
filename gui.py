@@ -1,85 +1,68 @@
 import tkinter as tk
+from tkinter import ttk
 
-def on_entry_button_click():
-    update_label("Entry Button clicked!")
+class DatabaseGUI:
+    def __init__(self, master, cursor):
+        self.master = master
+        self.master.title("Database GUI")
+        self.cursor = cursor
+        self.option_widgets = []
 
-def on_query_button_click():
-    update_label("Query Button clicked!")
+        self.selection_label = tk.Label(master, text="Select Action:")
+        self.selection_label.pack()
 
-def update_label(message):
-    entry_text = entry.get()
-    label.config(text=f"{message} Entered text: {entry_text}, Selected option: {var.get()}")
+        self.action_var = tk.StringVar()
+        self.action_var.set("Select Action")
 
-def update_layout():
-    selected_option = var.get()
+        self.action_dropdown = ttk.Combobox(master, textvariable=self.action_var, values=["Entry", "Query"])
+        self.action_dropdown.pack()
 
-    # Hide all widgets
-    entry_button.grid_forget()
-    query_button.grid_forget()
-    entry.grid_forget()
+        self.action_button = tk.Button(master, text="Select", command=self.handle_selection)
+        self.action_button.pack()
 
-    # Show widgets based on the selected option
-    if selected_option == "Department":
-        entry_button.grid(row=1, column=0, padx=5, pady=10, sticky="e")
-        entry.grid(row=2, column=0, padx=5, pady=10, sticky="ew")
-    elif selected_option == "Faculty":
-        query_button.grid(row=1, column=0, padx=5, pady=10, sticky="e")
-    elif selected_option == "Program":
-        entry_button.grid(row=1, column=0, padx=5, pady=10, sticky="e")
-        entry.grid(row=2, column=0, padx=5, pady=10, sticky="ew")
-    elif selected_option == "Course":
-        query_button.grid(row=1, column=0, padx=5, pady=10, sticky="e")
-        entry.grid(row=2, column=0, padx=5, pady=10, sticky="ew")
-    elif selected_option == "Section":
-        entry_button.grid(row=1, column=0, padx=5, pady=10, sticky="e")
-        query_button.grid(row=2, column=0, padx=5, pady=10, sticky="e")
-    elif selected_option == "Objectives":
-        entry_button.grid(row=1, column=0, padx=5, pady=10, sticky="e")
-        query_button.grid(row=2, column=0, padx=5, pady=10, sticky="e")
-        entry.grid(row=3, column=0, padx=5, pady=10, sticky="ew")
+    def handle_selection(self):
+        # Clear previously added dropdown and widgets
+        for widget in self.option_widgets:
+            widget.destroy()
+        self.option_widgets = []
+
+        selected_action = self.action_var.get()
+
+        if selected_action == "Entry":
+            self.show_entry_options()
+        elif selected_action == "Query":
+            self.show_query_options()
+
+    def show_entry_options(self):
+        entry_options = ["Course", "Section", "LearningObjective"]
+        self.show_options(entry_options)
+
+    def show_query_options(self):
+        query_options = ["Department", "Faculty", "Program", "Course", "Section", "LearningObjective"]
+        self.show_options(query_options)
+
+    def show_options(self, options):
+        option_label = tk.Label(self.master, text="Select Option:")
+        option_label.pack()
+
+        option_var = tk.StringVar()
+        option_var.set("Select Option")
+
+        option_dropdown = ttk.Combobox(self.master, textvariable=option_var, values=options)
+        option_dropdown.pack()
+
+        option_button = tk.Button(self.master, text="Submit", command=lambda: self.handle_option(option_var.get()))
+        option_button.pack()
+
+        # Keep track of added widgets for clearing later
+        self.option_widgets.extend([option_label, option_dropdown, option_button])
+
+    def handle_option(self, selected_option):
+        # Do something with the selected option (e.g., show data entry form or query results)
+        print(f"Selected Option: {selected_option}")
 
 if __name__ == "__main__":
-    # Create the main application window
-    app = tk.Tk()
-    app.title("DB Project")
+    root = tk.Tk()
 
-    # Configure column and row weights to make the app flexible
-    app.columnconfigure(0, weight=1)
-    app.rowconfigure(0, weight=1)
-    app.rowconfigure(1, weight=1)
-    app.rowconfigure(2, weight=1)
-    app.rowconfigure(3, weight=1)
-    app.rowconfigure(4, weight=1)
-
-    # Create an unchangeable label at the top
-    unchangeable_label = tk.Label(app, text="Course Catalog Database", font=("Times New Roman", 20), fg="blue")
-    unchangeable_label.grid(row=0, column=0, padx=5, pady=10, columnspan=2, sticky="ew")
-    unchangeable_label.place(anchor="nw")
-
-    # Create a label widget at the bottom right
-    label = tk.Label(app, text="Mode", font=("Times New Roman", 11), fg="Black")
-    label.grid(row=4, column=1, padx=5, pady=10, sticky="sew")  # Updated sticky="sew" for bottom right
-
-    # Create the Entry button widget
-    entry_button = tk.Button(app, text="Entry", command=on_entry_button_click)
-    query_button = tk.Button(app, text="Query", command=on_query_button_click)  
-    
-
-    # Create a variable to store the selected option
-    var = tk.StringVar(app)
-
-    # Create a dropdown menu
-    options = ["Department", "Faculty", "Program", "Course", "Section", "Objectives"]
-    dropdown = tk.OptionMenu(app, var, *options, command=lambda x: update_layout())
-    # dropdown.place(anchor=)
-
-    # Set a default option
-    var.set(options[0])
-
-    # Create a text input box
-    entry = tk.Entry(app)
-    entry.grid(row=2, column=1, padx=5, pady=10, sticky="ew")
-
-
-    # Start the main event loop
-    app.mainloop()
+    gui = DatabaseGUI(root, None)
+    root.mainloop()
