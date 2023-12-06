@@ -18,13 +18,10 @@ class DatabaseGUI:
         self.action_var.set("Select Action")
 
         self.action_dropdown = ttk.Combobox(master, textvariable=self.action_var, values=["Entry", "Query"])
-        self.action_dropdown.pack(pady=0)  # Set pady to 0
+        self.action_dropdown.pack(pady=0)
 
         self.action_button = tk.Button(master, text="Select", command=self.handle_selection)
         self.action_button.pack()
-
-        self.result_text = tk.Text(master, height=10, width=40)
-        self.result_text.pack()
 
     def handle_selection(self):
         selected_action = self.action_var.get()
@@ -90,25 +87,12 @@ class DatabaseGUI:
             department_id, department_name, department_code = department_data
             result_text = f"Department ID: {department_id}\nDepartment Name: {department_name}\nDepartment Code: {department_code}"
 
-        # Display result in the Text widget
-        self.result_text.delete(1.0, tk.END)  # Clear previous text
-        self.result_text.insert(tk.END, result_text)
+        # Display result in the console (you can customize this as needed)
+        print(result_text)
 
 
 if __name__ == "__main__":
-    """CHANGE THIS TO RUN"""
-    dbConn = create_connection("localhost", "root", "123456", "progDB")
-    print(dbConn)
-    cursor = dbConn.cursor()
-    print(cursor)
-    create_database(cursor, "progDB")
-    
-    
-    create_tables_from_file(cursor, "test_schema.sql", dbConn)
-
-
-
     root = tk.Tk()
 
-    gui = DatabaseGUI(root, cursor)
+    gui = DatabaseGUI(root, None)
     root.mainloop()
