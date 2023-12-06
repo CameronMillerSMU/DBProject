@@ -472,5 +472,196 @@ def driver():
     print(handle_courseProgram_assignment(cursor, dbConn, "ABCD0001", "Test 2 Program"))
 
 
+''' Test Populate Functions ''' # do not need to use functions 
+def populate_course_table(cursor, connection):
+    dummy_courses = [
+        ("CS010001", "Introduction to Computer Science", "Fundamental concepts of programming.", "CS01"),
+        ("EN010001", "Engineering Basics", "Introduction to engineering principles.", "EN01"),
+        ("BO010001", "Introduction to Biology", "Basic concepts in biology.", "BO01"),
+    ]
 
-driver()
+    try:
+        sqlcom = "INSERT INTO Course (CourseID, CourseTitle, CourseDescription, DepartmentCode) VALUES (%s, %s, %s, %s)"
+        cursor.executemany(sqlcom, dummy_courses)
+        connection.commit()
+
+        print("Dummy data successfully inserted into the Course table.")
+    except Error as e:
+        print(f"Error inserting dummy data into the Course table: {e}")
+
+def populate_course_eval_table(cursor, connection):
+    dummy_course_evals = [
+        ("CS010001", "Computer Science Program", "LO001"),
+        ("EN010001", "Engineering Program", "LO002"),
+        ("BO010001", "Biology Program", "LO003"),
+    ]
+
+    try:
+        sqlcom = "INSERT INTO CourseEval (CourseID, ProgramName, ObjectiveCode) VALUES (%s, %s, %s)"
+        cursor.executemany(sqlcom, dummy_course_evals)
+        connection.commit()
+
+        print("Dummy data successfully inserted into the CourseEval table.")
+    except Error as e:
+        print(f"Error inserting dummy data into the CourseEval table: {e}")
+
+
+def populate_departments_table(cursor, connection):
+    dummy_departments = [
+        ("CS01", "Computer Science"),
+        ("EN01", "Engineering"),
+        ("BO01", "Biology"),
+    ]
+
+    try:
+        sqlcom = "INSERT INTO Department (DepartmentCode, DepartmentName) VALUES (%s, %s)"
+        cursor.executemany(sqlcom, dummy_departments)
+        connection.commit()
+
+        print("Dummy data successfully inserted into the Departments table.")
+    except Error as e:
+        print(f"Error inserting dummy data into the Departments table: {e}")
+
+def populate_faculty_table(cursor, connection):
+    dummy_faculty = [
+        ("F001", "John Doe", "john.doe@example.com", "Full", "CS01"),
+        ("F002", "Jane Smith", "jane.smith@example.com", "Associate", "EN01"),
+        ("F003", "Bob Johnson", "bob.johnson@example.com", "Assistant", "BO01"),
+    ]
+
+    try:
+        sqlcom = "INSERT INTO Faculty (FacultyID, FacultyName, FacultyEmail, FacultyRank, DepartmentCode) VALUES (%s, %s, %s, %s, %s)"
+        cursor.executemany(sqlcom, dummy_faculty)
+        connection.commit()
+
+        print("Dummy data successfully inserted into the Faculty table.")
+    except Error as e:
+        print(f"Error inserting dummy data into the Faculty table: {e}")
+
+def populate_learning_objective_table(cursor, connection):
+    dummy_learning_objectives = [
+        ("LO001", "Understand fundamental programming concepts."),
+        ("LO002", "Apply engineering principles to problem-solving."),
+        ("LO003", "Comprehend basic biological concepts."),
+    ]
+
+    try:
+        sqlcom = "INSERT INTO LearningObjective (ObjectiveCode, ObjectiveDescription) VALUES (%s, %s)"
+        cursor.executemany(sqlcom, dummy_learning_objectives)
+        connection.commit()
+
+        print("Dummy data successfully inserted into the LearningObjective table.")
+    except Error as e:
+        print(f"Error inserting dummy data into the LearningObjective table: {e}")
+
+def populate_program_table(cursor, connection):
+    dummy_programs = [
+        ("Computer Science Program", "F001", "CS01"),
+        ("Engineering Program", "F002", "EN01"),
+        ("Biology Program", "F003", "BO01"),
+    ]
+
+    try:
+        sqlcom = "INSERT INTO Program (ProgramName, ProgramCoordinatorID, DepartmentCode) VALUES (%s, %s, %s)"
+        cursor.executemany(sqlcom, dummy_programs)
+        connection.commit()
+
+        print("Dummy data successfully inserted into the Program table.")
+    except Error as e:
+        print(f"Error inserting dummy data into the Program table: {e}")
+
+def populate_program_course_table(cursor, connection):
+    dummy_program_courses = [
+        ("CS010001", "Computer Science Program"),
+        ("EN010001", "Engineering Program"),
+        ("BO010001", "Biology Program"),
+    ]
+
+    try:
+        sqlcom = "INSERT INTO ProgramCourse (CourseID, ProgramName) VALUES (%s, %s)"
+        cursor.executemany(sqlcom, dummy_program_courses)
+        connection.commit()
+
+        print("Dummy data successfully inserted into the ProgramCourse table.")
+    except Error as e:
+        print(f"Error inserting dummy data into the ProgramCourse table: {e}")
+
+def populate_program_objective_table(cursor, connection):
+    dummy_program_objectives = [
+        ("Computer Science Program", "LO001"),
+        ("Engineering Program", "LO002"),
+        ("Biology Program", "LO003"),
+    ]
+
+    try:
+        sqlcom = "INSERT INTO ProgramObjective (ProgramName, ObjectiveCode) VALUES (%s, %s)"
+        cursor.executemany(sqlcom, dummy_program_objectives)
+        connection.commit()
+
+        print("Dummy data successfully inserted into the ProgramObjective table.")
+    except Error as e:
+        print(f"Error inserting dummy data into the ProgramObjective table: {e}")
+
+def populate_section_table(cursor, connection):
+    dummy_sections = [
+        (1, "CS010001", "Fall", 2023, "F001", 30),
+        (2, "EN010001", "Spring", 2023, "F002", 25),
+        (3, "BO010001", "Summer", 2023, "F003", 20),
+    ]
+
+    try:
+        sqlcom = "INSERT INTO Section (SectionID, CourseID, SemesterName, CourseYear, FacultyID, StudentsEnrolled) VALUES (%s, %s, %s, %s, %s, %s)"
+        cursor.executemany(sqlcom, dummy_sections)
+        connection.commit()
+
+        print("Dummy data successfully inserted into the Section table.")
+    except Error as e:
+        print(f"Error inserting dummy data into the Section table: {e}")
+
+def populate_section_eval_table(cursor, connection):
+    dummy_section_evals = [
+        (1, "CS010001", "Computer Science Program", "LO001", "Exam", 25),
+        (2, "EN010001", "Engineering Program", "LO002", "Project", 20),
+        (3, "BO010001", "Biology Program", "LO003", "Quiz", 15),
+    ]
+
+    try:
+        sqlcom = "INSERT INTO SectionEval (SectionID, CourseID, ProgramName, ObjectiveCode, EvalType, StudentsMetObj) VALUES (%s, %s, %s, %s, %s, %s)"
+        cursor.executemany(sqlcom, dummy_section_evals)
+        connection.commit()
+
+        print("Dummy data successfully inserted into the SectionEval table.")
+    except Error as e:
+        print(f"Error inserting dummy data into the SectionEval table: {e}")
+
+def populate_sub_objective_table(cursor, connection):
+    dummy_sub_objectives = [
+        ("LO001.1", "Write basic programs in a chosen programming language.", "LO001"),
+        ("LO002.1", "Apply mathematical concepts to engineering problems.", "LO002"),
+        ("LO003.1", "Understand the process of cellular respiration.", "LO003"),
+    ]
+
+    try:
+        sqlcom = "INSERT INTO SubObjective (SubObjectiveCode, SubObjectiveDescription, ObjectiveCode) VALUES (%s, %s, %s)"
+        cursor.executemany(sqlcom, dummy_sub_objectives)
+        connection.commit()
+
+        print("Dummy data successfully inserted into the SubObjective table.")
+    except Error as e:
+        print(f"Error inserting dummy data into the SubObjective table: {e}")
+
+# needs to be in a specific order 
+def populate_all_tables(cursor, connection):
+    populate_departments_table(cursor, connection)
+    populate_faculty_table(cursor, connection)
+    populate_program_table(cursor, connection)
+    populate_course_table(cursor, connection)
+    populate_section_table(cursor, connection)
+    populate_learning_objective_table(cursor, connection)
+    populate_sub_objective_table(cursor, connection)
+    populate_program_course_table(cursor, connection)
+    populate_program_objective_table(cursor, connection)
+    populate_course_eval_table(cursor, connection)
+    populate_section_eval_table(cursor, connection)
+
+# driver()
