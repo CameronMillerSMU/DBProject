@@ -19,3 +19,7 @@ Things to fix later:
 
 This is in no way, shape or form safe against SQL injections 
 
+
+Demo Notes
+
+* Cannot have two section id in different years/semesters
