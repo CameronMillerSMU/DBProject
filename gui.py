@@ -90,6 +90,21 @@ class DatabaseGUI:
         elif self.action_var.get() == "Entry" and selected_option == "LearningObjective":
             self.show_learning_objective_entry_form(selected_value)
 
+    def show_program_query_form(self, selected_value):
+        self.destroy_option_widgets()
+
+        program_name_label = tk.Label(self.master, text=f"{selected_value} Name:")
+        program_name_label.pack()
+
+        program_name_entry = tk.Entry(self.master)
+        program_name_entry.pack()
+
+        execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_program_query(program_name_entry.get()))
+        execute_button.pack()
+
+        self.option_widgets["program_name_label"] = program_name_label
+        self.option_widgets["program_name_entry"] = program_name_entry
+        self.option_widgets["execute_button"] = execute_button
 
     def show_department_query_form(self, selected_value):
         self.destroy_option_widgets()
@@ -107,23 +122,7 @@ class DatabaseGUI:
         self.option_widgets["department_code_label"] = department_code_label
         self.option_widgets["department_code_entry"] = department_code_entry
         self.option_widgets["execute_button"] = execute_button
-
-    def show_program_query_form(self, selected_value):
-        self.destroy_option_widgets()
-
-        program_name_label = tk.Label(self.master, text=f"{selected_value} Name:")
-        program_name_label.pack()
-
-        program_name_entry = tk.Entry(self.master)
-        program_name_entry.pack()
-
-        execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_program_query(program_name_entry.get()))
-        execute_button.pack()
-
-        self.option_widgets["program_name_label"] = program_name_label
-        self.option_widgets["program_name_entry"] = program_name_entry
-        self.option_widgets["execute_button"] = execute_button
-
+        
     def show_semester_query_form(self, selected_value):
         self.destroy_option_widgets()
 
@@ -221,19 +220,35 @@ class DatabaseGUI:
         faculty_name_entry = tk.Entry(self.master)
         faculty_name_entry.pack()
 
-        faculty_id_label = tk.Label(self.master, text=f"{selected_value} ID:")
-        faculty_id_label.pack()
+        faculty_email_label = tk.Label(self.master, text=f"{selected_value} Email:")
+        faculty_email_label.pack()
 
-        faculty_id_entry = tk.Entry(self.master)
-        faculty_id_entry.pack()
+        faculty_email_entry = tk.Entry(self.master)
+        faculty_email_entry.pack()
 
-        execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_faculty_entry(faculty_name_entry.get(), faculty_id_entry.get()))
+        department_code_label = tk.Label(self.master, text="Department Code:")
+        department_code_label.pack()
+
+        department_code_entry = tk.Entry(self.master)
+        department_code_entry.pack()
+
+        faculty_rank_label = tk.Label(self.master, text="Faculty Rank:")
+        faculty_rank_label.pack()
+
+        faculty_rank_entry = tk.Entry(self.master)
+        faculty_rank_entry.pack()
+
+        execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_faculty_entry(faculty_name_entry.get(), faculty_email_entry.get(), department_code_entry.get(), faculty_rank_entry.get()))
         execute_button.pack()
 
         self.option_widgets["faculty_name_label"] = faculty_name_label
         self.option_widgets["faculty_name_entry"] = faculty_name_entry
-        self.option_widgets["faculty_id_label"] = faculty_id_label
-        self.option_widgets["faculty_id_entry"] = faculty_id_entry
+        self.option_widgets["faculty_email_label"] = faculty_email_label
+        self.option_widgets["faculty_email_entry"] = faculty_email_entry
+        self.option_widgets["department_code_label"] = department_code_label
+        self.option_widgets["department_code_entry"] = department_code_entry
+        self.option_widgets["faculty_rank_label"] = faculty_rank_label
+        self.option_widgets["faculty_rank_entry"] = faculty_rank_entry
         self.option_widgets["execute_button"] = execute_button
 
     def show_course_entry_form(self, selected_value):
