@@ -351,7 +351,6 @@ def handle_faculty_entry(cursor, connection, fac_id, fac_name, fac_email, dept_c
     else:
         return "Email is not valid. Please try again."
 
-    
 def handle_course_entry(cursor, connection, co_id, co_title, co_desc, dept_code):
     if not check_dept_code(dept_code) and check_course_id(co_id):
         return "Department Code or Course ID not valid"
