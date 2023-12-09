@@ -375,12 +375,12 @@ def handle_department_entry(cursor, connection, dept_code, dept_name):
     else:
         return "There was an issue entering the information, please try again."
     
-def handle_faculty_entry(cursor, connection, fac_id, fac_name, fac_email, dept_code, fac_rank = "Adjunct"):
+def handle_faculty_entry(cursor, connection, fac_name, fac_email, dept_code, fac_rank = "Adjunct"):
     if not check_dept_code(dept_code):
         return "Department Code not valid"
     
     if verify_email(fac_email):
-        if enter_faculty_info(cursor, connection, fac_id, fac_name, fac_email, dept_code, fac_rank):
+        if enter_faculty_info(cursor, connection, fac_name, fac_email, dept_code, fac_rank):
             return "Faculty Info Stored Successfully"
     else:
         return "Email is not valid. Please try again."
