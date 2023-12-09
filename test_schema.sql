@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS Section (
     CourseYear YEAR,
     FacultyID VARCHAR(10),
     StudentsEnrolled INT,
-    PRIMARY KEY (SectionID, CourseID), -- added CourseID to key
+    PRIMARY KEY (SectionID, CourseID, CourseYear), -- added CourseYear
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
     FOREIGN KEY (FacultyID) REFERENCES Faculty(FacultyID),
     CHECK (SemesterName IN ('Fall', 'Spring', 'Summer'))

@@ -4,29 +4,29 @@ import mysql.connector as sql
 from mysql.connector import Error
 import re
 
-"""CHANGE THIS TO RUN"""
+# """CHANGE THIS TO RUN"""
 # dbConn = create_connection("localhost", "root", "beepboop", "progDB")
 # cursor = dbConn.cursor()
 # create_database(cursor, "progDB")
 
-'''General Database Functions'''
+# '''General Database Functions'''
 
-tables = ["Program", "Department", "Faculty", "Course", "Section", 
-          "LearningObjective", "SubObjective", "CourseEval",
-          "SectionEval", "ProgramObjective", "ProgramCourse"]
+# tables = ["Program", "Department", "Faculty", "Course", "Section", 
+#           "LearningObjective", "SubObjective", "CourseEval",
+#           "SectionEval", "ProgramObjective", "ProgramCourse"]
 
-def clear_database(cursor, connection, tableList):
-    try:
-        cursor.execute("SET FOREIGN_KEY_CHECKS = 0")
-        for table in tableList:
-            sqlcom = "DROP TABLE IF EXISTS %s" % (table)
-            cursor.execute(sqlcom)
-        cursor.execute("SET FOREIGN_KEY_CHECKS = 1")
+# def clear_database(cursor, connection, tableList):
+#     try:
+#         cursor.execute("SET FOREIGN_KEY_CHECKS = 0")
+#         for table in tableList:
+#             sqlcom = "DROP TABLE IF EXISTS %s" % (table)
+#             cursor.execute(sqlcom)
+#         cursor.execute("SET FOREIGN_KEY_CHECKS = 1")
 
-        print("Database cleared successfully")
-    except Error as e:
-        print(f"The error '{e} occurred'")
-    connection.commit()
+#         print("Database cleared successfully")
+#     except Error as e:
+#         print(f"The error '{e} occurred'")
+#     connection.commit()
 
 
 # clear_database(cursor, dbConn, tables)
