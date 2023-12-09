@@ -254,27 +254,43 @@ class DatabaseGUI:
     def show_course_entry_form(self, selected_value):
         self.destroy_option_widgets()
 
-        course_name_label = tk.Label(self.master, text=f"{selected_value} Name:")
-        course_name_label.pack()
-
-        course_name_entry = tk.Entry(self.master)
-        course_name_entry.pack()
-
         course_id_label = tk.Label(self.master, text=f"{selected_value} ID:")
         course_id_label.pack()
 
         course_id_entry = tk.Entry(self.master)
         course_id_entry.pack()
 
-        execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_course_entry(course_name_entry.get(), course_id_entry.get()))
+        course_title_label = tk.Label(self.master, text=f"{selected_value} Title:")
+        course_title_label.pack()
+
+        course_title_entry = tk.Entry(self.master)
+        course_title_entry.pack()
+
+        course_description_label = tk.Label(self.master, text=f"{selected_value} Description:")
+        course_description_label.pack()
+
+        course_description_entry = tk.Entry(self.master)
+        course_description_entry.pack()
+
+        department_code_label = tk.Label(self.master, text="Department Code:")
+        department_code_label.pack()
+
+        department_code_entry = tk.Entry(self.master)
+        department_code_entry.pack()
+
+        execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_course_entry(course_id_entry.get(), course_title_entry.get(), course_description_entry.get(), department_code_entry.get()))
         execute_button.pack()
 
-        self.option_widgets["course_name_label"] = course_name_label
-        self.option_widgets["course_name_entry"] = course_name_entry
         self.option_widgets["course_id_label"] = course_id_label
         self.option_widgets["course_id_entry"] = course_id_entry
+        self.option_widgets["course_title_label"] = course_title_label
+        self.option_widgets["course_title_entry"] = course_title_entry
+        self.option_widgets["course_description_label"] = course_description_label
+        self.option_widgets["course_description_entry"] = course_description_entry
+        self.option_widgets["department_code_label"] = department_code_label
+        self.option_widgets["department_code_entry"] = department_code_entry
         self.option_widgets["execute_button"] = execute_button
-
+        
     def show_section_entry_form(self, selected_value):
         self.destroy_option_widgets()
 
