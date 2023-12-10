@@ -39,7 +39,7 @@ class DatabaseGUI:
         if hasattr(self, 'selected_option_label'):
             self.selected_option_label.destroy()
 
-        query_options = ["Department", "Program", "Semester", "Academic Year"]
+        query_options = ["Department", "Program", "Semester Program Results", "Academic Year Program Results"]
         self.action_var.set("Query")
         self.show_options(query_options)
 
@@ -78,15 +78,13 @@ class DatabaseGUI:
         self.selected_option_label.pack()
 
         # Queries
-        if self.action_var.get() == "Query" and selected_option == "Program":
-            self.show_program_query_form(selected_value)
-        elif self.action_var.get() == "Query" and selected_option == "Department":
+        if self.action_var.get() == "Query" and selected_option == "Department":
             self.show_department_query_form(selected_value)
-        elif self.action_var.get() == "Entry" and selected_option == "Faculty":
-            self.show_faculty_entry_form(selected_value)
-        elif self.action_var.get() == "Query" and selected_option == "Semester":
-            self.show_semester_query_form(selected_value)
-        elif self.action_var.get() == "Query" and selected_option == "Academic Year":
+        elif self.action_var.get() == "Query" and selected_option == "Program":
+            self.show_program_query_form(selected_value)
+        elif self.action_var.get() == "Query" and selected_option == "Semester Program Results":
+            self.show_semester_program_query_form(selected_value)
+        elif self.action_var.get() == "Query" and selected_option == "Academic Year Program Results":
             self.show_academic_year_query_form(selected_value)
 
         # Entries
@@ -102,71 +100,6 @@ class DatabaseGUI:
             self.show_section_entry_form(selected_value)
         elif self.action_var.get() == "Entry" and selected_option == "Learning Objective":
             self.show_learning_objective_entry_form(selected_value)
-
-    def show_program_query_form(self, selected_value):
-        self.destroy_option_widgets()
-
-        program_name_label = tk.Label(self.master, text=f"{selected_value} Name:")
-        program_name_label.pack()
-
-        program_name_entry = tk.Entry(self.master)
-        program_name_entry.pack()
-
-        execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_program_query(program_name_entry.get()))
-        execute_button.pack()
-
-        self.option_widgets["program_name_label"] = program_name_label
-        self.option_widgets["program_name_entry"] = program_name_entry
-        self.option_widgets["execute_button"] = execute_button
-
-    def show_department_query_form(self, selected_value):
-        self.destroy_option_widgets()
-
-        department_code_label = tk.Label(self.master, text=f"{selected_value} Code:")
-        department_code_label.pack()
-
-        department_code_entry = tk.Entry(self.master)
-        department_code_entry.pack()
-
-        execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_department_query(department_code_entry.get()))
-        execute_button.pack()
-
-        # Keep track of added widgets for clearing later
-        self.option_widgets["department_code_label"] = department_code_label
-        self.option_widgets["department_code_entry"] = department_code_entry
-        self.option_widgets["execute_button"] = execute_button
-        
-    def show_semester_query_form(self, selected_value):
-        self.destroy_option_widgets()
-
-        semester_label = tk.Label(self.master, text=f"{selected_value} Name:")
-        semester_label.pack()
-
-        semester_entry = tk.Entry(self.master)
-        semester_entry.pack()
-
-        execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_semester_query(semester_entry.get()))
-        execute_button.pack()
-
-        self.option_widgets["semester_label"] = semester_label
-        self.option_widgets["semester_entry"] = semester_entry
-        self.option_widgets["execute_button"] = execute_button
-
-    def show_academic_year_query_form(self, selected_value):
-        self.destroy_option_widgets()
-
-        academic_year_label = tk.Label(self.master, text=f"{selected_value} Name:")
-        academic_year_label.pack()
-
-        academic_year_entry = tk.Entry(self.master)
-        academic_year_entry.pack()
-
-        execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_academic_year_query(academic_year_entry.get()))
-        execute_button.pack()
-
-        self.option_widgets["academic_year_label"] = academic_year_label
-        self.option_widgets["academic_year_entry"] = academic_year_entry
-        self.option_widgets["execute_button"] = execute_button
 
     def show_program_entry_form(self, selected_value):
         self.destroy_option_widgets()
@@ -224,7 +157,6 @@ class DatabaseGUI:
         self.option_widgets["department_code_entry"] = department_code_entry
         self.option_widgets["execute_button"] = execute_button
 
-
     def show_faculty_entry_form(self, selected_value):
         self.destroy_option_widgets()
 
@@ -265,7 +197,6 @@ class DatabaseGUI:
         self.option_widgets["faculty_rank_entry"] = faculty_rank_entry
         self.option_widgets["execute_button"] = execute_button
 
-
     def show_course_entry_form(self, selected_value):
         self.destroy_option_widgets()
 
@@ -305,7 +236,6 @@ class DatabaseGUI:
         self.option_widgets["department_code_label"] = department_code_label
         self.option_widgets["department_code_entry"] = department_code_entry
         self.option_widgets["execute_button"] = execute_button
-
         
     def show_section_entry_form(self, selected_value):
         self.destroy_option_widgets()
@@ -355,7 +285,6 @@ class DatabaseGUI:
         self.option_widgets["students_enrolled_entry"] = students_enrolled_entry
         self.option_widgets["execute_button"] = execute_button
 
-
     def show_learning_objective_entry_form(self, selected_value):
         self.destroy_option_widgets()
 
@@ -379,48 +308,6 @@ class DatabaseGUI:
         self.option_widgets["objective_description_label"] = objective_description_label
         self.option_widgets["objective_description_entry"] = objective_description_entry
         self.option_widgets["execute_button"] = execute_button
-
-
-
-    def execute_program_query(self, program_name):
-        program_data = get_program(self.cursor, program_name)
-
-        if not program_data:
-            result_text = "Program does not exist. Please check program name."
-        else:
-            program_id, program_name, program_coordinator_id, department_code = program_data
-            result_text = f"Program ID: {program_id}\nProgram Name: {program_name}\nProgram Coordinator ID: {program_coordinator_id}\nDepartment Code: {department_code}"
-        print(result_text)
-
-    def execute_department_query(self, department_code):
-        department_data = get_department(self.cursor, department_code)
-
-        if not department_data:
-            result_text = "Department does not exist. Please check department code."
-        else:
-            department_id, department_name, department_code = department_data
-            result_text = f"Department ID: {department_id}\nDepartment Name: {department_name}\nDepartment Code: {department_code}"
-        print(result_text)
-
-    def execute_semester_query(self, semester_name):
-        semester_data = get_semester(self.cursor, semester_name)
-
-        if not semester_data:
-            result_text = "Semester does not exist. Please check semester name."
-        else:
-            semester_id, semester_name = semester_data
-            result_text = f"Semester ID: {semester_id}\nSemester Name: {semester_name}"
-        print(result_text)
-
-    def execute_academic_year_query(self, academic_year_name):
-        academic_year_data = get_academic_year(self.cursor, academic_year_name)
-
-        if not academic_year_data:
-            result_text = "Academic Year does not exist. Please check academic year name."
-        else:
-            academic_year_id, academic_year_name = academic_year_data
-            result_text = f"Academic Year ID: {academic_year_id}\nAcademic Year Name: {academic_year_name}"
-        print(result_text)
 
 
     def execute_program_entry(self, program_name, program_coordinator_id, department_code):
@@ -464,6 +351,97 @@ class DatabaseGUI:
 
         result_label = tk.Label(self.master, text=result_text)
         result_label.pack()
+
+
+    def show_program_query_form(self, selected_value):
+        self.destroy_option_widgets()
+
+        program_name_label = tk.Label(self.master, text=f"{selected_value} Name (max 255 characters):")
+        program_name_label.pack()
+
+        program_name_entry = tk.Entry(self.master)
+        program_name_entry.pack()
+
+        execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_program_query(program_name_entry.get()))
+        execute_button.pack()
+
+        self.option_widgets["program_name_label"] = program_name_label
+        self.option_widgets["program_name_entry"] = program_name_entry
+        self.option_widgets["execute_button"] = execute_button
+
+    def show_department_query_form(self, selected_value):
+        self.destroy_option_widgets()
+
+        department_code_label = tk.Label(self.master, text=f"{selected_value} Code (max 4 alpha characters):")
+        department_code_label.pack()
+
+        department_code_entry = tk.Entry(self.master)
+        department_code_entry.pack()
+
+        execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_department_query(department_code_entry.get()))
+        execute_button.pack()
+
+        # Keep track of added widgets for clearing later
+        self.option_widgets["department_code_label"] = department_code_label
+        self.option_widgets["department_code_entry"] = department_code_entry
+        self.option_widgets["execute_button"] = execute_button
+
+    def show_semester_program_query_form(self, selected_value):
+        self.destroy_option_widgets()
+
+        semester_name_label = tk.Label(self.master, text=f"{selected_value} Semester (Fall, Spring, Summer):")
+        semester_name_label.pack()
+
+        semester_name_entry = tk.Entry(self.master)
+        semester_name_entry.pack()
+
+        program_name_label = tk.Label(self.master, text=f"{selected_value} Program (max 255 characters):")
+        program_name_label.pack()
+
+        program_name_entry = tk.Entry(self.master)
+        program_name_entry.pack()
+
+        execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_semester_program_query(semester_name_entry.get(), program_name_entry.get()))
+        execute_button.pack()
+
+        self.option_widgets["semester_name_label"] = semester_name_label
+        self.option_widgets["semester_name_entry"] = semester_name_entry
+        self.option_widgets["program_name_label"] = program_name_label
+        self.option_widgets["program_name_entry"] = program_name_entry
+        self.option_widgets["execute_button"] = execute_button
+
+
+    def execute_program_query(self, program_name):
+        program_data = get_program(self.cursor, program_name)
+
+        if not program_data:
+            result_text = "Program does not exist. Please check program name."
+        else:
+            program_id, program_name, program_coordinator_id, department_code = program_data
+            result_text = f"Program ID: {program_id}\nProgram Name: {program_name}\nProgram Coordinator ID: {program_coordinator_id}\nDepartment Code: {department_code}"
+        print(result_text)
+
+    def execute_department_query(self, department_code):
+        department_data = get_department(self.cursor, department_code)
+
+        if not department_data:
+            result_text = "Department does not exist. Please check department code."
+        else:
+            department_id, department_name, department_code = department_data
+            result_text = f"Department ID: {department_id}\nDepartment Name: {department_name}\nDepartment Code: {department_code}"
+        print(result_text)
+
+    def execute_semester_program_query(self, semester_name, program_name):
+        program_data = get_section_eval_results(self.cursor, semester_name, program_name)
+
+        if not program_data:
+            result_text = "No results found. Please check semester name and program name."
+        else:
+            result_text = ""
+            for section_id, course_id, program_name, objective_code, eval_type, students_met_obj in program_data:
+                result_text += f"Section ID: {section_id}\nCourse ID: {course_id}\nProgram Name: {program_name}\nObjective Code: {objective_code}\nEvaluation Type: {eval_type}\nStudents Met Objective: {students_met_obj}\n\n"
+        print(result_text)
+
 
 if __name__ == "__main__":
     root = tk.Tk()

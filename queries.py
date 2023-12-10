@@ -41,6 +41,22 @@ def get_program(cursor, program_name):
         print("Invalid input or error:", e)
         return None
 
+def get_section_eval_results(cursor, semester_name, program_name):
+    try:
+        cursor.execute("""
+            SELECT se.SectionID, se.CourseID, se.ProgramName, se.ObjectiveCode, se.EvalType, se.StudentsMetObj
+            FROM SectionEval se
+            INNER JOIN Section s ON se.SectionID = s.SectionID AND se.CourseID = s.CourseID
+            WHERE s.SemesterName = %s AND se.ProgramName = %s
+        """, (semester_name, program_name))
+        
+        section_eval_results = cursor.fetchall()
+        return section_eval_results
+
+    except Error as e:
+        print("Invalid input or error:", e)
+        return None
+    
 def get_course(cursor, course_id):
     try:
         cursor.execute("SELECT * FROM Course WHERE CourseID = %s", (course_id,))
