@@ -411,6 +411,23 @@ class DatabaseGUI:
         self.option_widgets["execute_button"] = execute_button
 
 
+    def show_academic_year_query_form(self, selected_value):
+        self.destroy_option_widgets()
+
+        academic_year_label = tk.Label(self.master, text=f"{selected_value} Academic Year (YY-YY):")
+        academic_year_label.pack()
+
+        academic_year_entry = tk.Entry(self.master)
+        academic_year_entry.pack()
+            
+        execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_academic_year_program_query(academic_year_entry.get()))
+        execute_button.pack()
+
+        self.option_widgets["academic_year_label"] = academic_year_label
+        self.option_widgets["academic_year_entry"] = academic_year_entry
+        self.option_widgets["execute_button"] = execute_button
+
+
     def execute_program_query(self, program_name):
         program_data = get_program(self.cursor, program_name)
 
@@ -422,6 +439,9 @@ class DatabaseGUI:
             result_text = f"Program Name: {program_name}\nProgram Coordinator ID: {program_coordinator_id}\nDepartment Code: {department_code}"
         print(result_text)
 
+        result_label = tk.Label(self.master, text=result_text)
+        result_label.pack()
+
     def execute_department_query(self, department_code):
         department_data = get_department(self.cursor, department_code)
 
@@ -431,6 +451,9 @@ class DatabaseGUI:
             department_id, department_name, department_code = department_data
             result_text = f"Department ID: {department_id}\nDepartment Name: {department_name}\nDepartment Code: {department_code}"
         print(result_text)
+
+        result_label = tk.Label(self.master, text=result_text)
+        result_label.pack()
 
     def execute_semester_program_query(self, semester_name, program_name):
         program_data = get_section_eval_results(self.cursor, semester_name, program_name)
@@ -442,6 +465,23 @@ class DatabaseGUI:
             for section_id, course_id, program_name, objective_code, eval_type, students_met_obj in program_data:
                 result_text += f"Section ID: {section_id}\nCourse ID: {course_id}\nProgram Name: {program_name}\nObjective Code: {objective_code}\nEvaluation Type: {eval_type}\nStudents Met Objective: {students_met_obj}\n\n"
         print(result_text)
+
+        result_label = tk.Label(self.master, text=result_text)
+        result_label.pack()
+
+    def execute_academic_year_program_query(self, academic_year):
+        program_data = get_academic_year(self.cursor, academic_year)
+
+        if not program_data:
+            result_text = "No results found. Please check academic year inputted."
+        else:
+            result_text = ""
+            for program_name, objective_code, eval_type, students_met_obj in program_data:
+                result_text += f"Program Name: {program_name}\nObjective Code: {objective_code}\nEvaluation Type: {eval_type}\nStudents Met Objective: {students_met_obj}\n\n"
+        print(result_text)
+
+        result_label = tk.Label(self.master, text=result_text)
+        result_label.pack()
 
 
 if __name__ == "__main__":
