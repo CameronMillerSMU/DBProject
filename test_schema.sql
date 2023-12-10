@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS Department (
 
 -- New Faculty Table
 CREATE TABLE IF NOT EXISTS Faculty (
-    FacultyID INT AUTO_INCREMENT,
+    FacultyID VARCHAR(10),
     FacultyName VARCHAR(255),
     FacultyEmail VARCHAR(255),
     FacultyRank VARCHAR(20), -- full, associate, assistant, adjunct
@@ -50,13 +50,13 @@ CREATE TABLE IF NOT EXISTS Course (
 
 -- Section Table
 CREATE TABLE IF NOT EXISTS Section (
-    SectionID INT AUTO_INCREMENT, -- 001 to 999
+    SectionID INT, -- removed auto increment (001 to 999)
     CourseID VARCHAR(8),
     SemesterName VARCHAR(20),
     CourseYear YEAR,
     FacultyID VARCHAR(10),
     StudentsEnrolled INT,
-    PRIMARY KEY (SectionID, CourseID, CourseYear), -- added CourseYear
+    PRIMARY KEY (SectionID, CourseID, CourseYear, SemesterName), -- added CourseYear
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
     FOREIGN KEY (FacultyID) REFERENCES Faculty(FacultyID),
     CHECK (SemesterName IN ('Fall', 'Spring', 'Summer'))
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS SectionEval (
     FOREIGN KEY (ObjectiveCode) REFERENCES LearningObjective(ObjectiveCode)
 );
 
--- ProgramObjective Table
+-- ProgramObjective Table - not used 
 CREATE TABLE IF NOT EXISTS ProgramObjective (
     ProgramName VARCHAR(255),
     ObjectiveCode VARCHAR(10),
