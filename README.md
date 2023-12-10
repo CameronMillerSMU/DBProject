@@ -20,10 +20,10 @@ Things to fix later:
 This is in no way, shape or form safe against SQL injections 
 
 
-Demo Notes
+Demo Notes/To-Do
 
 * Cannot have two section id in different years/semesters
-* Handle faculty doesn't need to have facultyID, auto-assign it 
+* Get academic year query 
 
 
 ## Final Report instructions 
