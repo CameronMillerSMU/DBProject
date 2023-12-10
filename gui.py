@@ -438,6 +438,9 @@ class DatabaseGUI:
             result_text = f"Program ID: {program_id}\nProgram Name: {program_name}\nProgram Coordinator ID: {program_coordinator_id}\nDepartment Code: {department_code}"
         print(result_text)
 
+        result_label = tk.Label(self.master, text=result_text)
+        result_label.pack()
+
     def execute_department_query(self, department_code):
         department_data = get_department(self.cursor, department_code)
 
@@ -447,6 +450,9 @@ class DatabaseGUI:
             department_id, department_name, department_code = department_data
             result_text = f"Department ID: {department_id}\nDepartment Name: {department_name}\nDepartment Code: {department_code}"
         print(result_text)
+
+        result_label = tk.Label(self.master, text=result_text)
+        result_label.pack()
 
     def execute_semester_program_query(self, semester_name, program_name):
         program_data = get_section_eval_results(self.cursor, semester_name, program_name)
@@ -459,6 +465,9 @@ class DatabaseGUI:
                 result_text += f"Section ID: {section_id}\nCourse ID: {course_id}\nProgram Name: {program_name}\nObjective Code: {objective_code}\nEvaluation Type: {eval_type}\nStudents Met Objective: {students_met_obj}\n\n"
         print(result_text)
 
+        result_label = tk.Label(self.master, text=result_text)
+        result_label.pack()
+
     def execute_academic_year_program_query(self, academic_year):
         program_data = get_academic_year(self.cursor, academic_year)
 
@@ -470,19 +479,22 @@ class DatabaseGUI:
                 result_text += f"Program Name: {program_name}\nObjective Code: {objective_code}\nEvaluation Type: {eval_type}\nStudents Met Objective: {students_met_obj}\n\n"
         print(result_text)
 
+        result_label = tk.Label(self.master, text=result_text)
+        result_label.pack()
+
 
 if __name__ == "__main__":
     root = tk.Tk()
 
-    # """CHANGE THIS TO RUN"""
-    # dbConn = create_connection("localhost", "root", "123456", "progDB")
-    # cursor = dbConn.cursor()
-    # create_database(cursor, "progDB")
-    # clear_database(cursor, dbConn, tables)
+    """CHANGE THIS TO RUN"""
+    dbConn = create_connection("localhost", "root", "123456", "progDB")
+    cursor = dbConn.cursor()
+    create_database(cursor, "progDB")
+    clear_database(cursor, dbConn, tables)
     
-    # create_tables_from_file(cursor, "test_schema.sql", dbConn)
+    create_tables_from_file(cursor, "test_schema.sql", dbConn)
     
-    # populate_all_tables(cursor, dbConn)
+    populate_all_tables(cursor, dbConn)
 
-    gui = DatabaseGUI(root, None, None)
+    gui = DatabaseGUI(root, cursor, dbConn)
     root.mainloop()
