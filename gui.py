@@ -305,7 +305,6 @@ class DatabaseGUI:
         self.option_widgets["execute_button"] = execute_button
         
     def show_section_entry_form(self, selected_value):
-        # course_id, semester, year, faculty_id, students_enrolled
         self.destroy_option_widgets()
 
         course_id_label = tk.Label(self.master, text=f"{selected_value} ID:")
@@ -418,30 +417,49 @@ class DatabaseGUI:
             result_text = f"Academic Year ID: {academic_year_id}\nAcademic Year Name: {academic_year_name}"
         print(result_text)
 
+
+
     def execute_program_entry(self, program_name, program_coordinator_id, department_code):
         result_text = handle_program_entry(self.cursor, self.connector, program_name, program_coordinator_id, department_code)
         print(result_text)
 
+        result_label = tk.Label(self.master, text=result_text)
+        result_label.pack()
+
     def execute_department_entry(self, department_name, department_code):
-        print(department_code, department_name)
         result_text = handle_department_entry(self.cursor, self.connector, department_code, department_name)
         print(result_text)
+
+        result_label = tk.Label(self.master, text=result_text)
+        result_label.pack()
 
     def execute_faculty_entry(self, faculty_name, faculty_email, department_code, faculty_rank):
         result_text = handle_faculty_entry(self.cursor, self.connector, faculty_name, faculty_email, department_code, faculty_rank)
         print(result_text)
 
+        result_label = tk.Label(self.master, text=result_text)
+        result_label.pack()
+
     def execute_course_entry(self, course_id, course_title, course_description, department_code):
         result_text = handle_course_entry(self.cursor, self.connector, course_id, course_title, course_description, department_code)
         print(result_text)
+
+        result_label = tk.Label(self.master, text=result_text)
+        result_label.pack()
 
     def execute_section_entry(self, course_id, semester, year, faculty_id, students_enrolled):
         result_text = handle_section_entry(self.cursor, self.connector, course_id, semester, year, faculty_id, students_enrolled)
         print(result_text)
 
+        result_label = tk.Label(self.master, text=result_text)
+        result_label.pack()
+
     def execute_learning_objective_entry(self, objective_code, objective_description):
         result_text = handle_learningObjective_entry(self.cursor, self.connector, objective_code, objective_description)
         print(result_text)
+
+        result_label = tk.Label(self.master, text=result_text)
+        result_label.pack()
 
 if __name__ == "__main__":
     root = tk.Tk()
