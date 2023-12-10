@@ -5,10 +5,11 @@ from entry import *
 from testAll import *
 
 class DatabaseGUI:
-    def __init__(self, master, cursor):
+    def __init__(self, master, cursor, connector):
         self.master = master
         self.master.title("Database GUI")
         self.cursor = cursor
+        self.connector = connector
         self.option_widgets = {}  # Initialize option_widgets dictionary
         self.action_var = tk.StringVar()  # Initialize action_var
 
@@ -422,6 +423,7 @@ class DatabaseGUI:
         print(result_text)
 
     def execute_department_entry(self, department_name, department_code):
+        print(department_code, department_name)
         result_text = handle_department_entry(self.cursor, self.connector, department_code, department_name)
         print(result_text)
 
@@ -444,5 +446,15 @@ class DatabaseGUI:
 if __name__ == "__main__":
     root = tk.Tk()
 
-    gui = DatabaseGUI(root, None)
+    """CHANGE THIS TO RUN"""
+    dbConn = create_connection("localhost", "root", "123456", "progDB")
+    cursor = dbConn.cursor()
+    create_database(cursor, "progDB")
+    clear_database(cursor, dbConn, tables)
+    
+    create_tables_from_file(cursor, "test_schema.sql", dbConn)
+    
+    populate_all_tables(cursor, dbConn)
+
+    gui = DatabaseGUI(root, cursor, dbConn)
     root.mainloop()

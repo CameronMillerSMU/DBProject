@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS Department (
 
 -- New Faculty Table
 CREATE TABLE IF NOT EXISTS Faculty (
-    FacultyID INT AUTO_INCREMENT,
+    FacultyID VARCHAR(10),
     FacultyName VARCHAR(255),
     FacultyEmail VARCHAR(255),
     FacultyRank VARCHAR(20), -- full, associate, assistant, adjunct
