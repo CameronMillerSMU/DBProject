@@ -329,6 +329,7 @@ class DatabaseGUI:
         result_text = handle_program_entry(self.cursor, self.connector, program_name, program_coordinator_id, department_code)
         print(result_text)
 
+        self.destroy_result_label()
         self.result_label = tk.Label(self.master, text=result_text)
         self.result_label.pack()
 
@@ -336,6 +337,7 @@ class DatabaseGUI:
         result_text = handle_department_entry(self.cursor, self.connector, department_code, department_name)
         print(result_text)
 
+        self.destroy_result_label()
         self.result_label = tk.Label(self.master, text=result_text)
         self.result_label.pack()
 
@@ -343,6 +345,7 @@ class DatabaseGUI:
         result_text = handle_faculty_entry(self.cursor, self.connector, faculty_name, faculty_email, department_code, faculty_rank)
         print(result_text)
 
+        self.destroy_result_label()
         self.result_label = tk.Label(self.master, text=result_text)
         self.result_label.pack()
 
@@ -350,6 +353,7 @@ class DatabaseGUI:
         result_text = handle_course_entry(self.cursor, self.connector, course_id, course_title, course_description, department_code)
         print(result_text)
 
+        self.destroy_result_label()
         self.result_label = tk.Label(self.master, text=result_text)
         self.result_label.pack()
 
@@ -357,6 +361,7 @@ class DatabaseGUI:
         result_text = handle_section_entry(self.cursor, self.connector, course_id, semester, year, faculty_id, students_enrolled)
         print(result_text)
 
+        self.destroy_result_label()
         self.result_label = tk.Label(self.master, text=result_text)
         self.result_label.pack()
 
@@ -364,6 +369,7 @@ class DatabaseGUI:
         result_text = handle_learningObjective_entry(self.cursor, self.connector, objective_code, objective_description)
         print(result_text)
 
+        self.destroy_result_label()
         self.result_label = tk.Label(self.master, text=result_text)
         self.result_label.pack()
 
@@ -454,6 +460,7 @@ class DatabaseGUI:
             result_text = f"Program Name: {program_name}\nProgram Coordinator ID: {program_coordinator_id}\nDepartment Code: {department_code}"
         print(result_text)
 
+        self.destroy_result_label()
         self.result_label = tk.Label(self.master, text=result_text)
         self.result_label.pack()
 
@@ -467,6 +474,7 @@ class DatabaseGUI:
             result_text = f"Department Name: {department_name}\nDepartment Code: {department_code}"
         print(result_text)
 
+        self.destroy_result_label()
         self.result_label = tk.Label(self.master, text=result_text)
         self.result_label.pack()
 
@@ -481,6 +489,7 @@ class DatabaseGUI:
                 result_text += f"Section ID: {section_id}\nCourse ID: {course_id}\nProgram Name: {program_name}\nObjective Code: {objective_code}\nEvaluation Type: {eval_type}\nStudents Met Objective: {students_met_obj}\n\n"
         print(result_text)
 
+        self.destroy_result_label()
         self.result_label = tk.Label(self.master, text=result_text)
         self.result_label.pack()
 
@@ -495,6 +504,7 @@ class DatabaseGUI:
                 result_text += f"Program Name: {program_name}\nObjective Code: {objective_code}\nEvaluation Type: {eval_type}\nStudents Met Objective: {students_met_obj}\n\n"
         print(result_text)
 
+        self.destroy_result_label()
         self.result_label = tk.Label(self.master, text=result_text)
         self.result_label.pack()
 
