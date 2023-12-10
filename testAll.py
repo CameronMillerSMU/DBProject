@@ -188,31 +188,6 @@ def enter_faculty_info(cursor, connection, fac_id, fac_name, fac_email, dept_cod
     except Error as e:
         print(f"Error inserting faculty data: {e}")
         return False
-
-# def enter_course_info(cursor, connection, co_id, co_title, co_desc, dept_code):
-#     if not check_dept_exists(cursor, dept_code):
-#         return False
-    
-#     try:
-#         sqlcom = "INSERT INTO Course (CourseID, CourseTitle, CourseDescription, DepartmentCode) \
-#         VALUES (%(co_id)s, %(co_title)s, %(co_desc)s, %(dept_code)s)"
-#         course_data = {'co_id': co_id, 'co_title': co_title, 'co_desc': co_desc, 'dept_code': dept_code}
-# #         # Insert data into the Courses table
-# #         sqlcom = "INSERT INTO Course (CourseID, CourseTitle, CourseDescription, DepartmentCode) \
-# #             VALUES (%s, %s, %s, %s)"
-# #         course_data = (co_id, co_title, co_desc, dept_code)
-# #         print(course_data)
-#         cursor.execute(sqlcom, course_data)
-#         #cursor.execute(sqlcom)
-
-#         # Commit the transaction
-#         connection.commit()
-
-#         print(f"Data for course '{co_title}' successfully inserted into the Courses table.")
-#         return True
-#     except Error as e:
-#         print(f"Error inserting course data: {e}")
-#         return False
     
 def enter_course_data(cursor, connector, course_id, course_title, c_description, dept_code):
     # check if the dept exists - if not, return error
@@ -385,13 +360,6 @@ def handle_faculty_entry(cursor, connection, fac_name, fac_email, dept_code, fac
     else:
         return "Email is not valid. Please try again."
 
-    
-# def handle_course_entry(cursor, connection, co_id, co_title, co_desc, dept_code):
-#     if not check_dept_code(dept_code) and check_course_id(co_id):
-#         return "Department Code or Course ID not valid"
-    
-#     if enter_course_info(cursor, connection, str(co_id), str(co_title), str(co_desc), str(dept_code)):
-#         return "Course Info Stored Successfully"
     
 # Functions to Handle User Input
 def handle_course_entry(cursor, connector, course_id, course_title, c_description, dept_code):

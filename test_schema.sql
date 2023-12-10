@@ -5,9 +5,9 @@ CREATE TABLE IF NOT EXISTS Department (
     PRIMARY KEY (DepartmentCode)
 );
 
--- Faculty Table
+-- New Faculty Table
 CREATE TABLE IF NOT EXISTS Faculty (
-    FacultyID VARCHAR(10) UNIQUE,
+    FacultyID INT AUTO_INCREMENT,
     FacultyName VARCHAR(255),
     FacultyEmail VARCHAR(255),
     FacultyRank VARCHAR(20), -- full, associate, assistant, adjunct
@@ -16,6 +16,17 @@ CREATE TABLE IF NOT EXISTS Faculty (
     FOREIGN KEY (DepartmentCode) REFERENCES Department(DepartmentCode),
     CHECK (FacultyRank IN ('Full', 'Associate', 'Assistant', 'Adjunct'))
 );
+-- Faculty Table
+-- CREATE TABLE IF NOT EXISTS Faculty (
+--     FacultyID VARCHAR(10) UNIQUE,
+--     FacultyName VARCHAR(255),
+--     FacultyEmail VARCHAR(255),
+--     FacultyRank VARCHAR(20), -- full, associate, assistant, adjunct
+--     DepartmentCode VARCHAR(4),
+--     PRIMARY KEY (FacultyID),
+--     FOREIGN KEY (DepartmentCode) REFERENCES Department(DepartmentCode),
+--     CHECK (FacultyRank IN ('Full', 'Associate', 'Assistant', 'Adjunct'))
+-- );
 
 -- Program Table
 CREATE TABLE IF NOT EXISTS Program (
