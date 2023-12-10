@@ -15,6 +15,8 @@ class DatabaseGUI:
 
         self.main_menu()
 
+    
+
     def main_menu(self):
         self.selection_label = tk.Label(self.master, text="Select Action:")
         self.selection_label.pack()
@@ -25,14 +27,18 @@ class DatabaseGUI:
         query_button = tk.Button(self.master, text="Query", command=self.show_query_options)
         query_button.pack()
 
+    def destroy_result_label(self):
+        # Destroy the result_label if it exists
+        if hasattr(self, 'result_label'):
+            self.result_label.destroy()
+
     def show_entry_options(self):
         # destroy the previous selected option label
         if hasattr(self, 'selected_option_label'):
             self.selected_option_label.destroy()
 
         # destroy the previous selected option label
-        if hasattr(self, 'result_label'):
-            self.result_label.destroy()
+        self.destroy_result_label()
 
         entry_options = ["Program", "Department", "Faculty", "Course", "Section", "Learning Objective"]
         self.action_var.set("Entry")
@@ -44,8 +50,7 @@ class DatabaseGUI:
             self.selected_option_label.destroy()
 
         # destroy the previous selected option label
-        if hasattr(self, 'result_label'):
-            self.result_label.destroy()
+        self.destroy_result_label()
 
         query_options = ["Department", "Program", "Semester Program Results", "Academic Year Program Results"]
         self.action_var.set("Query")
@@ -81,6 +86,8 @@ class DatabaseGUI:
             widget.destroy()
 
     def handle_option(self, selected_option, selected_value):
+        self.destroy_result_label()
+
         # show the selected option above the form
         self.selected_option_label = tk.Label(self.master, text=f"Selected Option: {selected_option}")
         self.selected_option_label.pack()
@@ -455,8 +462,8 @@ class DatabaseGUI:
         if not department_data:
             result_text = "Department does not exist. Please check department code."
         else:
-            department_id, department_name, department_code = department_data
-            result_text = f"Department ID: {department_id}\nDepartment Name: {department_name}\nDepartment Code: {department_code}"
+            department_name, department_code = department_data
+            result_text = f"Department Name: {department_name}\nDepartment Code: {department_code}"
         print(result_text)
 
         self.result_label = tk.Label(self.master, text=result_text)
@@ -505,4 +512,5 @@ if __name__ == "__main__":
     populate_all_tables(cursor, dbConn)
 
     gui = DatabaseGUI(root, cursor, dbConn)
+    # gui = DatabaseGUI(root, None, None)
     root.mainloop()
