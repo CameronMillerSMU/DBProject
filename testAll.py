@@ -35,7 +35,7 @@ def check_dept_code(dept_code):
     return bool(match)
 
 def check_course_id(c_id):
-    id_pattern = re.compile(r'^[a-zA-Z]{4}[0-9]{4}$')
+    id_pattern = re.compile(r'^[a-zA-Z]{2,4}[0-9]{4}$')
     match = re.match(id_pattern, c_id)
     return bool(match)
 
@@ -632,6 +632,3 @@ def driver():
     print(handle_learningObjective_entry(cursor, dbConn, "LO1", "here is the decription"))
     print(handle_subObjective_entry(cursor, dbConn, "LO1", "here is the sub objective description"))
     print(handle_courseProgram_assignment(cursor, dbConn, "ABCD0001", "Test 2 Program"))
-
-
-# driver()

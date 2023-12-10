@@ -446,15 +446,15 @@ class DatabaseGUI:
 if __name__ == "__main__":
     root = tk.Tk()
 
-    # """CHANGE THIS TO RUN"""
-    # dbConn = create_connection("localhost", "root", "123456", "progDB")
-    # cursor = dbConn.cursor()
-    # create_database(cursor, "progDB")
-    # clear_database(cursor, dbConn, tables)
+    """CHANGE THIS TO RUN"""
+    dbConn = create_connection("localhost", "root", "123456", "progDB")
+    cursor = dbConn.cursor()
+    create_database(cursor, "progDB")
+    clear_database(cursor, dbConn, tables)
     
-    # create_tables_from_file(cursor, "test_schema.sql", dbConn)
+    create_tables_from_file(cursor, "test_schema.sql", dbConn)
     
-    # populate_all_tables(cursor, dbConn)
+    populate_all_tables(cursor, dbConn)
 
     gui = DatabaseGUI(root, None, None)
     root.mainloop()
