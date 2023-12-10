@@ -496,7 +496,7 @@ class DatabaseGUI:
         program_data = get_academic_year(self.cursor, academic_year)
 
         if not program_data:
-            result_text = "No results found. Please check academic year inputted."
+            result_text = "No results found. Please check academic year."
         else:
             result_text = ""
             for program_name, objective_code, eval_type, students_met_obj in program_data:
