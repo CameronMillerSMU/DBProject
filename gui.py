@@ -102,6 +102,73 @@ class DatabaseGUI:
         elif self.action_var.get() == "Entry" and selected_option == "Learning Objective":
             self.show_learning_objective_entry_form(selected_value)
 
+
+    def execute_program_query(self, program_name):
+        program_data = get_program(self.cursor, program_name)
+
+        if not program_data:
+            result_text = "Program does not exist. Please check program name."
+        else:
+            program_id, program_name, program_coordinator_id, department_code = program_data
+            result_text = f"Program ID: {program_id}\nProgram Name: {program_name}\nProgram Coordinator ID: {program_coordinator_id}\nDepartment Code: {department_code}"
+        print(result_text)
+
+    def execute_department_query(self, department_code):
+        department_data = get_department(self.cursor, department_code)
+
+        if not department_data:
+            result_text = "Department does not exist. Please check department code."
+        else:
+            department_id, department_name, department_code = department_data
+            result_text = f"Department ID: {department_id}\nDepartment Name: {department_name}\nDepartment Code: {department_code}"
+        print(result_text)
+
+    def execute_semester_query(self, semester_name):
+        semester_data = get_semester(self.cursor, semester_name)
+
+        if not semester_data:
+            result_text = "Semester does not exist. Please check semester name."
+        else:
+            semester_id, semester_name = semester_data
+            result_text = f"Semester ID: {semester_id}\nSemester Name: {semester_name}"
+        print(result_text)
+
+    def execute_academic_year_query(self, academic_year_name):
+        academic_year_data = get_academic_year(self.cursor, academic_year_name)
+
+        if not academic_year_data:
+            result_text = "Academic Year does not exist. Please check academic year name."
+        else:
+            academic_year_id, academic_year_name = academic_year_data
+            result_text = f"Academic Year ID: {academic_year_id}\nAcademic Year Name: {academic_year_name}"
+        print(result_text)
+
+    def execute_program_entry(self, program_name, program_coordinator_id, department_code):
+        result_text = handle_program_entry(self.cursor, self.connector, program_name, program_coordinator_id, department_code)
+        print(result_text)
+
+    def execute_department_entry(self, department_name, department_code):
+        result_text = handle_department_entry(self.cursor, self.connector, department_code, department_name)
+        print(result_text)
+
+    def execute_faculty_entry(self, faculty_name, faculty_email, department_code, faculty_rank):
+        result_text = handle_faculty_entry(self.cursor, self.connector, faculty_name, faculty_email, department_code, faculty_rank)
+        print(result_text)
+
+    def execute_course_entry(self, course_id, course_title, course_description, department_code):
+        result_text = handle_course_entry(self.cursor, self.connector, course_id, course_title, course_description, department_code)
+        print(result_text)
+
+    def execute_section_entry(self, course_id, semester, year, faculty_id, students_enrolled):
+        result_text = handle_section_entry(self.cursor, self.connector, course_id, semester, year, faculty_id, students_enrolled)
+        print(result_text)
+
+    def execute_learning_objective_entry(self, objective_code, objective_description):
+        result_text = handle_learningObjective_entry(self.cursor, self.connector, objective_code, objective_description)
+        print(result_text)
+
+
+
     def show_program_query_form(self, selected_value):
         self.destroy_option_widgets()
 
@@ -377,69 +444,6 @@ class DatabaseGUI:
         self.option_widgets["execute_button"] = execute_button
 
 
-    def execute_program_query(self, program_name):
-        program_data = get_program(self.cursor, program_name)
-
-        if not program_data:
-            result_text = "Program does not exist. Please check program name."
-        else:
-            program_id, program_name, program_coordinator_id, department_code = program_data
-            result_text = f"Program ID: {program_id}\nProgram Name: {program_name}\nProgram Coordinator ID: {program_coordinator_id}\nDepartment Code: {department_code}"
-        print(result_text)
-
-    def execute_department_query(self, department_code):
-        department_data = get_department(self.cursor, department_code)
-
-        if not department_data:
-            result_text = "Department does not exist. Please check department code."
-        else:
-            department_id, department_name, department_code = department_data
-            result_text = f"Department ID: {department_id}\nDepartment Name: {department_name}\nDepartment Code: {department_code}"
-        print(result_text)
-
-    def execute_semester_query(self, semester_name):
-        semester_data = get_semester(self.cursor, semester_name)
-
-        if not semester_data:
-            result_text = "Semester does not exist. Please check semester name."
-        else:
-            semester_id, semester_name = semester_data
-            result_text = f"Semester ID: {semester_id}\nSemester Name: {semester_name}"
-        print(result_text)
-
-    def execute_academic_year_query(self, academic_year_name):
-        academic_year_data = get_academic_year(self.cursor, academic_year_name)
-
-        if not academic_year_data:
-            result_text = "Academic Year does not exist. Please check academic year name."
-        else:
-            academic_year_id, academic_year_name = academic_year_data
-            result_text = f"Academic Year ID: {academic_year_id}\nAcademic Year Name: {academic_year_name}"
-        print(result_text)
-
-    def execute_program_entry(self, program_name, program_coordinator_id, department_code):
-        result_text = handle_program_entry(self.cursor, self.connector, program_name, program_coordinator_id, department_code)
-        print(result_text)
-
-    def execute_department_entry(self, department_name, department_code):
-        result_text = handle_department_entry(self.cursor, self.connector, department_code, department_name)
-        print(result_text)
-
-    def execute_faculty_entry(self, faculty_name, faculty_email, department_code, faculty_rank):
-        result_text = handle_faculty_entry(self.cursor, self.connector, faculty_name, faculty_email, department_code, faculty_rank)
-        print(result_text)
-
-    def execute_course_entry(self, course_id, course_title, course_description, department_code):
-        result_text = handle_course_entry(self.cursor, self.connector, course_id, course_title, course_description, department_code)
-        print(result_text)
-
-    def execute_section_entry(self, course_id, semester, year, faculty_id, students_enrolled):
-        result_text = handle_section_entry(self.cursor, self.connector, course_id, semester, year, faculty_id, students_enrolled)
-        print(result_text)
-
-    def execute_learning_objective_entry(self, objective_code, objective_description):
-        result_text = handle_learningObjective_entry(self.cursor, self.connector, objective_code, objective_description)
-        print(result_text)
 
 if __name__ == "__main__":
     root = tk.Tk()
