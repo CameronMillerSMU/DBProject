@@ -30,6 +30,10 @@ class DatabaseGUI:
         if hasattr(self, 'selected_option_label'):
             self.selected_option_label.destroy()
 
+        # destroy the previous selected option label
+        if hasattr(self, 'result_label'):
+            self.result_label.destroy()
+
         entry_options = ["Program", "Department", "Faculty", "Course", "Section", "Learning Objective"]
         self.action_var.set("Entry")
         self.show_options(entry_options)
@@ -38,6 +42,10 @@ class DatabaseGUI:
         # destroy the previous selected option label
         if hasattr(self, 'selected_option_label'):
             self.selected_option_label.destroy()
+
+        # destroy the previous selected option label
+        if hasattr(self, 'result_label'):
+            self.result_label.destroy()
 
         query_options = ["Department", "Program", "Semester Program Results", "Academic Year Program Results"]
         self.action_var.set("Query")
@@ -314,43 +322,43 @@ class DatabaseGUI:
         result_text = handle_program_entry(self.cursor, self.connector, program_name, program_coordinator_id, department_code)
         print(result_text)
 
-        result_label = tk.Label(self.master, text=result_text)
-        result_label.pack()
+        self.result_label = tk.Label(self.master, text=result_text)
+        self.result_label.pack()
 
     def execute_department_entry(self, department_name, department_code):
         result_text = handle_department_entry(self.cursor, self.connector, department_code, department_name)
         print(result_text)
 
-        result_label = tk.Label(self.master, text=result_text)
-        result_label.pack()
+        self.result_label = tk.Label(self.master, text=result_text)
+        self.result_label.pack()
 
     def execute_faculty_entry(self, faculty_name, faculty_email, department_code, faculty_rank):
         result_text = handle_faculty_entry(self.cursor, self.connector, faculty_name, faculty_email, department_code, faculty_rank)
         print(result_text)
 
-        result_label = tk.Label(self.master, text=result_text)
-        result_label.pack()
+        self.result_label = tk.Label(self.master, text=result_text)
+        self.result_label.pack()
 
     def execute_course_entry(self, course_id, course_title, course_description, department_code):
         result_text = handle_course_entry(self.cursor, self.connector, course_id, course_title, course_description, department_code)
         print(result_text)
 
-        result_label = tk.Label(self.master, text=result_text)
-        result_label.pack()
+        self.result_label = tk.Label(self.master, text=result_text)
+        self.result_label.pack()
 
     def execute_section_entry(self, course_id, semester, year, faculty_id, students_enrolled):
         result_text = handle_section_entry(self.cursor, self.connector, course_id, semester, year, faculty_id, students_enrolled)
         print(result_text)
 
-        result_label = tk.Label(self.master, text=result_text)
-        result_label.pack()
+        self.result_label = tk.Label(self.master, text=result_text)
+        self.result_label.pack()
 
     def execute_learning_objective_entry(self, objective_code, objective_description):
         result_text = handle_learningObjective_entry(self.cursor, self.connector, objective_code, objective_description)
         print(result_text)
 
-        result_label = tk.Label(self.master, text=result_text)
-        result_label.pack()
+        self.result_label = tk.Label(self.master, text=result_text)
+        self.result_label.pack()
 
 
     def show_program_query_form(self, selected_value):
@@ -438,8 +446,8 @@ class DatabaseGUI:
             result_text = f"Program ID: {program_id}\nProgram Name: {program_name}\nProgram Coordinator ID: {program_coordinator_id}\nDepartment Code: {department_code}"
         print(result_text)
 
-        result_label = tk.Label(self.master, text=result_text)
-        result_label.pack()
+        self.result_label = tk.Label(self.master, text=result_text)
+        self.result_label.pack()
 
     def execute_department_query(self, department_code):
         department_data = get_department(self.cursor, department_code)
@@ -451,8 +459,8 @@ class DatabaseGUI:
             result_text = f"Department ID: {department_id}\nDepartment Name: {department_name}\nDepartment Code: {department_code}"
         print(result_text)
 
-        result_label = tk.Label(self.master, text=result_text)
-        result_label.pack()
+        self.result_label = tk.Label(self.master, text=result_text)
+        self.result_label.pack()
 
     def execute_semester_program_query(self, semester_name, program_name):
         program_data = get_section_eval_results(self.cursor, semester_name, program_name)
@@ -465,8 +473,8 @@ class DatabaseGUI:
                 result_text += f"Section ID: {section_id}\nCourse ID: {course_id}\nProgram Name: {program_name}\nObjective Code: {objective_code}\nEvaluation Type: {eval_type}\nStudents Met Objective: {students_met_obj}\n\n"
         print(result_text)
 
-        result_label = tk.Label(self.master, text=result_text)
-        result_label.pack()
+        self.result_label = tk.Label(self.master, text=result_text)
+        self.result_label.pack()
 
     def execute_academic_year_program_query(self, academic_year):
         program_data = get_academic_year(self.cursor, academic_year)
@@ -479,8 +487,8 @@ class DatabaseGUI:
                 result_text += f"Program Name: {program_name}\nObjective Code: {objective_code}\nEvaluation Type: {eval_type}\nStudents Met Objective: {students_met_obj}\n\n"
         print(result_text)
 
-        result_label = tk.Label(self.master, text=result_text)
-        result_label.pack()
+        self.result_label = tk.Label(self.master, text=result_text)
+        self.result_label.pack()
 
 
 if __name__ == "__main__":
