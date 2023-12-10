@@ -30,7 +30,7 @@ def verify_email(email):
     return bool(match)
 
 def check_dept_code(dept_code):
-    dept_pattern = re.compile(r'^[a-zA-Z]{4}$')
+    dept_pattern = re.compile(r'^[a-zA-Z]{2,4}$')
     match = re.match(dept_pattern, dept_code)
     return bool(match)
 
