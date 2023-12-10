@@ -171,19 +171,19 @@ class DatabaseGUI:
     def show_program_entry_form(self, selected_value):
         self.destroy_option_widgets()
 
-        program_name_label = tk.Label(self.master, text=f"{selected_value} Name:")
+        program_name_label = tk.Label(self.master, text=f"{selected_value} Name (max 255 characters):")
         program_name_label.pack()
 
         program_name_entry = tk.Entry(self.master)
         program_name_entry.pack()
 
-        program_coordinator_label = tk.Label(self.master, text=f"{selected_value} Coordinator ID:")
+        program_coordinator_label = tk.Label(self.master, text=f"{selected_value} Coordinator ID (max 10 characters):")
         program_coordinator_label.pack()
 
         program_coordinator_entry = tk.Entry(self.master)
         program_coordinator_entry.pack()
 
-        department_code_label = tk.Label(self.master, text="Department Code:")
+        department_code_label = tk.Label(self.master, text="Department Code (max 4 alpha characters):")
         department_code_label.pack()
 
         department_code_entry = tk.Entry(self.master)
@@ -203,13 +203,13 @@ class DatabaseGUI:
     def show_department_entry_form(self, selected_value):
         self.destroy_option_widgets()
 
-        department_name_label = tk.Label(self.master, text=f"{selected_value} Name:")
+        department_name_label = tk.Label(self.master, text=f"{selected_value} Name (max 255 characters):")
         department_name_label.pack()
 
         department_name_entry = tk.Entry(self.master)
         department_name_entry.pack()
 
-        department_code_label = tk.Label(self.master, text=f"{selected_value} Code:")
+        department_code_label = tk.Label(self.master, text=f"{selected_value} Code (max 4 alpha characters):")
         department_code_label.pack()
 
         department_code_entry = tk.Entry(self.master)
@@ -224,28 +224,29 @@ class DatabaseGUI:
         self.option_widgets["department_code_entry"] = department_code_entry
         self.option_widgets["execute_button"] = execute_button
 
+
     def show_faculty_entry_form(self, selected_value):
         self.destroy_option_widgets()
 
-        faculty_name_label = tk.Label(self.master, text=f"{selected_value} Name:")
+        faculty_name_label = tk.Label(self.master, text=f"{selected_value} Name (max 255 characters):")
         faculty_name_label.pack()
 
         faculty_name_entry = tk.Entry(self.master)
         faculty_name_entry.pack()
 
-        faculty_email_label = tk.Label(self.master, text=f"{selected_value} Email:")
+        faculty_email_label = tk.Label(self.master, text=f"{selected_value} Email (max 255 characters):")
         faculty_email_label.pack()
 
         faculty_email_entry = tk.Entry(self.master)
         faculty_email_entry.pack()
 
-        department_code_label = tk.Label(self.master, text="Department Code:")
+        department_code_label = tk.Label(self.master, text="Department Code (max 4 alpha characters):")
         department_code_label.pack()
 
         department_code_entry = tk.Entry(self.master)
         department_code_entry.pack()
 
-        faculty_rank_label = tk.Label(self.master, text="Faculty Rank:")
+        faculty_rank_label = tk.Label(self.master, text="Faculty Rank (Full, Associate, Assistant, Adjunct):")
         faculty_rank_label.pack()
 
         faculty_rank_entry = tk.Entry(self.master)
@@ -264,16 +265,17 @@ class DatabaseGUI:
         self.option_widgets["faculty_rank_entry"] = faculty_rank_entry
         self.option_widgets["execute_button"] = execute_button
 
+
     def show_course_entry_form(self, selected_value):
         self.destroy_option_widgets()
 
-        course_id_label = tk.Label(self.master, text=f"{selected_value} ID:")
+        course_id_label = tk.Label(self.master, text=f"{selected_value} ID (max 8 characters):")
         course_id_label.pack()
 
         course_id_entry = tk.Entry(self.master)
         course_id_entry.pack()
 
-        course_title_label = tk.Label(self.master, text=f"{selected_value} Title:")
+        course_title_label = tk.Label(self.master, text=f"{selected_value} Title (max 255 characters):")
         course_title_label.pack()
 
         course_title_entry = tk.Entry(self.master)
@@ -285,7 +287,7 @@ class DatabaseGUI:
         course_description_entry = tk.Entry(self.master)
         course_description_entry.pack()
 
-        department_code_label = tk.Label(self.master, text="Department Code:")
+        department_code_label = tk.Label(self.master, text="Department Code (max 4 alpha characters):")
         department_code_label.pack()
 
         department_code_entry = tk.Entry(self.master)
@@ -303,17 +305,18 @@ class DatabaseGUI:
         self.option_widgets["department_code_label"] = department_code_label
         self.option_widgets["department_code_entry"] = department_code_entry
         self.option_widgets["execute_button"] = execute_button
+
         
     def show_section_entry_form(self, selected_value):
         self.destroy_option_widgets()
 
-        course_id_label = tk.Label(self.master, text=f"{selected_value} ID:")
+        course_id_label = tk.Label(self.master, text=f"{selected_value} ID (max 8 characters):")
         course_id_label.pack()
 
         course_id_entry = tk.Entry(self.master)
         course_id_entry.pack()
 
-        semester_label = tk.Label(self.master, text=f"{selected_value} Semester:")
+        semester_label = tk.Label(self.master, text=f"{selected_value} Semester (Fall, Spring, Summer):")
         semester_label.pack()
 
         semester_entry = tk.Entry(self.master)
@@ -325,7 +328,7 @@ class DatabaseGUI:
         year_entry = tk.Entry(self.master)
         year_entry.pack()
 
-        faculty_id_label = tk.Label(self.master, text=f"{selected_value} Faculty ID:")
+        faculty_id_label = tk.Label(self.master, text=f"{selected_value} Faculty ID (max 10 characters):")
         faculty_id_label.pack()
 
         faculty_id_entry = tk.Entry(self.master)
@@ -352,10 +355,11 @@ class DatabaseGUI:
         self.option_widgets["students_enrolled_entry"] = students_enrolled_entry
         self.option_widgets["execute_button"] = execute_button
 
+
     def show_learning_objective_entry_form(self, selected_value):
         self.destroy_option_widgets()
 
-        objective_code_label = tk.Label(self.master, text=f"{selected_value} Code:")
+        objective_code_label = tk.Label(self.master, text=f"{selected_value} Code (max 10 characters):")
         objective_code_label.pack()
 
         objective_code_entry = tk.Entry(self.master)
@@ -375,6 +379,7 @@ class DatabaseGUI:
         self.option_widgets["objective_description_label"] = objective_description_label
         self.option_widgets["objective_description_entry"] = objective_description_entry
         self.option_widgets["execute_button"] = execute_button
+
 
 
     def execute_program_query(self, program_name):
@@ -416,7 +421,6 @@ class DatabaseGUI:
             academic_year_id, academic_year_name = academic_year_data
             result_text = f"Academic Year ID: {academic_year_id}\nAcademic Year Name: {academic_year_name}"
         print(result_text)
-
 
 
     def execute_program_entry(self, program_name, program_coordinator_id, department_code):
@@ -464,15 +468,15 @@ class DatabaseGUI:
 if __name__ == "__main__":
     root = tk.Tk()
 
-    """CHANGE THIS TO RUN"""
-    dbConn = create_connection("localhost", "root", "123456", "progDB")
-    cursor = dbConn.cursor()
-    create_database(cursor, "progDB")
-    clear_database(cursor, dbConn, tables)
+    # """CHANGE THIS TO RUN"""
+    # dbConn = create_connection("localhost", "root", "123456", "progDB")
+    # cursor = dbConn.cursor()
+    # create_database(cursor, "progDB")
+    # clear_database(cursor, dbConn, tables)
     
-    create_tables_from_file(cursor, "test_schema.sql", dbConn)
+    # create_tables_from_file(cursor, "test_schema.sql", dbConn)
     
-    populate_all_tables(cursor, dbConn)
+    # populate_all_tables(cursor, dbConn)
 
-    gui = DatabaseGUI(root, cursor, dbConn)
+    gui = DatabaseGUI(root, None, None)
     root.mainloop()
