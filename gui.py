@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 from queries import *
-from entry import *
-from testAll import *
+from data_entry import *
+from data_filler import *
 
 class DatabaseGUI:
     def __init__(self, master, cursor, connector):

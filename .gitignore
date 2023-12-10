@@ -3,3 +3,5 @@ __pycache__/
 
 # Ignore Jupyter Notebook .ipynb_checkpoints folders
 .ipynb_checkpoints/
+
+project-morgan.ipynb

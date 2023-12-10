@@ -2,6 +2,9 @@ import csv
 import mysql.connector as sql
 from mysql.connector import Error
 
+tables = ["Program", "Department", "Faculty", "Course", "Section", 
+          "LearningObjective", "SubObjective", "CourseEval",
+          "SectionEval", "ProgramObjective", "ProgramCourse"]
 
 def create_database(cursor, database_name):
     try:
@@ -50,26 +53,6 @@ def create_tables_from_file(cursor, filename, connection):
         print(f"The error '{e} occurred'")
     
     connection.commit()
-
-# def create_tables_from_file(cursor, file_name, connection):
-#     try:
-#         cursor.execute("SELECT 1 FROM Team LIMIT 1")
-#     except Error as e:
-#         if "Table 'Team' doesn't exist" in str(e):
-#             with open("schema.sql", 'r') as sql_file:
-#                 sql_commands = sql_file.read().split(';')
-#                 for sql_command in sql_commands:
-#                     sql_command = sql_command.strip()
-#                     if sql_command:
-#                         cursor.execute(sql_command)
-#             connection.commit()
-#         else:
-#             print(f"The error '{e}' occurred")
-
-
-tables = ["Program", "Department", "Faculty", "Course", "Section", 
-          "LearningObjective", "SubObjective", "CourseEval",
-          "SectionEval", "ProgramObjective", "ProgramCourse"]
 
 
 def clear_database(cursor, connection, tableList):
