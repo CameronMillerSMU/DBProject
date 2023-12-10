@@ -1,26 +1,8 @@
 from project import *
-import csv
-import mysql.connector as sql
-from mysql.connector import Error
+# import csv
+# import mysql.connector as sql
+# from mysql.connector import Error
 import re
-
-
-# '''General Database Functions'''
-# tables = ["Program", "Department", "Faculty", "Course", "Section", 
-#           "LearningObjective", "SubObjective", "CourseEval",
-#           "SectionEval", "ProgramObjective", "ProgramCourse"]
-
-
-# def clear_database(cursor, connection, tableList):
-#     try:
-#         cursor.execute("SET FOREIGN_KEY_CHECKS = 0")
-#         for table in tableList:
-#             sqlcom = "DROP TABLE IF EXISTS %s" % (table)
-#             cursor.execute(sqlcom)
-#         cursor.execute("SET FOREIGN_KEY_CHECKS = 1")
-#     except Error as e:
-#         print(f"The error '{e} occurred'")
-#     connection.commit()
 
 
 '''Input Handling Helper Functions'''
@@ -53,8 +35,7 @@ def check_dept_exists(cursor, dept_code):
         print("Department does not exist. Please check department code.")
         return False
     except Error as e:
-        print(f"Error executing Department Select: {e}")
-        
+        print(f"Error executing Department Select: {e}")    
         
 def check_fal_exists(cursor, fal_id):
     try:
@@ -121,6 +102,17 @@ def create_subObj_code(cursor, obj_code):
     code = str(obj_code) + "." + str(num)
     return code
 
+# creates a section id given a course, semester and year
+def create_sectionID(cursor, course_id, semester, year):
+    com = "SELECT COUNT(*) FROM Section WHERE CourseID = '%s' AND SemesterName = '%s' AND CourseYear = %d" % (course_id, semester, year)
+    cursor.execute(com)
+
+    num = cursor.fetchall()
+    num = num[0][0]+1
+
+    id = str(num)
+    return id
+
 '''Database Entry Functions'''
 
 def enter_program_info(cursor, connection, prog_name, pc_id, dept_code):
@@ -151,7 +143,6 @@ def enter_program_info(cursor, connection, prog_name, pc_id, dept_code):
         print(f"Error inserting program data: {e}")
         return False
     
-
 def enter_department_info(cursor, connection, dept_code, dept_name):
     try:
         # Insert data into the Departments table
@@ -209,7 +200,7 @@ def enter_course_data(cursor, connector, course_id, course_title, c_description,
         print(f"Error inserting course data: {e}")
         return False
 
-def enter_section_data(cursor, connector, course_id, semester, year, f_id, students_enrolled):
+def enter_section_data(cursor, connector, section_id, course_id, semester, year, f_id, students_enrolled):
     #check if the course and faculty member exist 
     if not check_course_exists(cursor, course_id):
         return False 
@@ -218,10 +209,9 @@ def enter_section_data(cursor, connector, course_id, semester, year, f_id, stude
 
     try:
         #insert data into Sections table
-        command = "INSERT INTO Section (CourseID, SemesterName, CourseYear, FacultyID, StudentsEnrolled) \
-            VALUES (%s, %s, %s, %s, %s)"
-        section_values = (course_id, semester, year, f_id, students_enrolled)
-        # print(command, section_values)
+        command = "INSERT INTO Section (SectionID, CourseID, SemesterName, CourseYear, FacultyID, StudentsEnrolled) \
+            VALUES (%s, %s, %s, %s, %s, %s)"
+        section_values = (section_id, course_id, semester, year, f_id, students_enrolled)
         cursor.execute(command, section_values)
 
         # commit changes to the database 
@@ -232,6 +222,7 @@ def enter_section_data(cursor, connector, course_id, semester, year, f_id, stude
         return False
 
 def enter_learningObjective_data(cursor, connector, obj_code, obj_description):
+
     try:
         #insert data into Learning Objectives table
         command = "INSERT INTO LearningObjective (ObjectiveCode, ObjectiveDescription) \
@@ -267,8 +258,7 @@ def enter_subObjective_data(cursor, connector, subObj_code, obj_code, subObj_des
         print(f"Error inserting Sub-Objectives data: {e}")
         return False
 
-
-'''Assign Course to Program'''
+# program course table 
 def assign_course_to_program(cursor, connector, course_id, prog_name):
     # check if course and program exists
     if not check_course_exists(cursor, course_id):
@@ -277,9 +267,11 @@ def assign_course_to_program(cursor, connector, course_id, prog_name):
         return False
 
     try:
-        #insert data into CourseEval table
-        cursor.execute("INSERT INTO ProgramCourse (CourseID, ProgramName) VALUES (?,?)",
-                       course_id, prog_name)
+        #insert data into ProgramCourse table
+        command = "INSERT INTO ProgramCourse (CourseID, ProgramName) \
+            VALUES (%s, %s)"
+        course_program_values = (course_id, prog_name)
+        cursor.execute(command, course_program_values)
         # commit changes to the database 
         connector.commit()
         return True
@@ -287,9 +279,37 @@ def assign_course_to_program(cursor, connector, course_id, prog_name):
         print(f"Error inserting Course to Program: {e}")
         return False
     
-'''Assigning learning (sub)objectives to (course, program) pairs (remember, a course can
-be associated with multiple programs, and for each program, the objectives can be
-different).'''
+
+# helper function for assign_obj_to_course - for the course 
+
+# objectives are assigned to courses –> those objectives must also be assigned to that course's section 
+# Need to find all the sections of a course:
+# - known: couseId, prog_name and obj_code
+#   - have courseid -> can get the sections from Section table by searching with courseid and grouping by sectionid 
+#   - got sections -> can interate through them and add the obj_code to each section in the SectionEval table #
+def get_sections(cursor, connector, course_id):
+    try:
+        command = "SELECT SectionID FROM Section WHERE CourseID = '%s' GROUP BY SectionID" % (course_id)
+        cursor.execute(command)
+        sections = []
+        for x in cursor.fetchall():
+            sections.append(str(x[0]))
+        return sections
+    except Error as e:
+        print(f"Error finding objective to section data: {e}")
+
+def assign_obj_to_section(cursor, connector, section_id, course_id, prog_name, obj_code):
+    try:
+        command = "INSERT INTO SectionEval (SectionID, CourseID, ProgramName, ObjectiveCode) \
+                VALUES (%s, %s, %s, %s)"
+        obj_section_values = (section_id, course_id, prog_name, obj_code)
+        cursor.execute(command, obj_section_values)
+        return True
+    except Error as e:
+        print(f"Error assigning objective to section data: {e}")
+        return False
+
+# assigns a LO to a course-program pair (in the CourseEval table)
 def assign_obj_to_course(cursor, connection, co_id, prog_name, obj_code):
     # check if course, program pair exists
     com = "SELECT * FROM ProgramCourse WHERE ProgramName = '%s' AND CourseID = '%s'" % (prog_name, co_id)
@@ -297,11 +317,17 @@ def assign_obj_to_course(cursor, connection, co_id, prog_name, obj_code):
     
     if cursor.fetchall(): 
         try:
-            sqlcom = "INSERT INTO ProgramCourse (CourseID, ProgramName) \
-                VALUES (%s, %s)"
-            course_data = (co_id, prog_name)
-            cursor.execute(sqlcom, course_data)
+            command = "INSERT INTO CourseEval (CourseID, ProgramName, ObjectiveCode) \
+                VALUES (%s, %s, %s)"
+            obj_course_values = (co_id, prog_name, obj_code)
+            cursor.execute(command, obj_course_values)
 
+            # assigns the objectives to all the course's sections 
+            num_of_sections = get_sections(cursor, connection, co_id)
+            for x in num_of_sections:
+                if not assign_obj_to_section(cursor, connection, x, co_id, prog_name, obj_code):
+                    return False
+            
             # Commit the transaction
             connection.commit()
             return True
@@ -310,25 +336,36 @@ def assign_obj_to_course(cursor, connection, co_id, prog_name, obj_code):
             return False
     return False
 
-def get_section_id(cursor, connection, c_id, semester, year):
+# FIXME: don't need this function, but need to fix the auto increment for SectionID in the Section table
+#   needs to auto increment in a way that for a course in a specific year and semester the sectionid starts from 001 to 999
+#       - example:
+#           - for CS2341 in Fall 2023 sections are: 001, 002, 003
+#           - for CS2341 in Spring 2023 sections are: 001, 002
+
+# def get_section_id(cursor, connection, c_id, semester, year):
+#     try:
+#         command = "SELECT SectionID, FacultyID FROM Section WHERE CourseID = '%s' AND \
+#             SemesterName = '%s' AND CourseYear = %d" % (c_id, semester, year) 
+#         cursor.execute(command)
+#         return cursor.fetchall()
+#     except Error as e:
+#         print(f"Error getting Section ID data: {e}")
+
+#enters the evaluation results for the specific section
+def enter_section_eval_results(cursor, connection, section_id, course_id, prog_name, obj_code, stud_met, eval_type):
     try:
-        command = "SELECT SectionID, FacultyID FROM Section WHERE CourseID = '%s' AND \
-            SemesterName = '%s' AND CourseYear = %d" % (c_id, semester, year) 
+        command = "UPDATE SectionEval SET StudentsMetObj = %d, EvalType = '%s' WHERE ObjectiveCode = '%s' \
+            AND SectionID = '%s' AND CourseID = '%s' AND ProgramName = '%s'" % (stud_met, eval_type, obj_code, section_id, course_id, prog_name)
         cursor.execute(command)
-        return cursor.fetchall()
-    except Error as e:
-        print(f"Error getting Section ID data: {e}")
-    
-def enter_section_eval_results(cursor, connction, section_id, course_id, prog_name, obj_code, stud_met):
-    try:
-        command = "UPDATE SectionEval set StudentsMetObj = %d WHERE ObjectionCode = '%s' \
-            AND SectionID = '%s' AND CourseID = '%s' AND ProgramName = '%s'"
-        section_eval_values = (stud_met, obj_code, section_id, course_id, prog_name)
-        cursor.execute(command, section_eval_values)
+
+        # Commit the transaction
+        connection.commit()
         return True
     except Error as e:
         print(f"Error entering section evaluation results: {e}")
         return False
+    
+
 
 '''Input Handling Functions'''
 
@@ -360,8 +397,6 @@ def handle_faculty_entry(cursor, connection, fac_id, fac_name, fac_email, dept_c
     else:
         return "Email is not valid. Please try again."
 
-    
-# Functions to Handle User Input
 def handle_course_entry(cursor, connector, course_id, course_title, c_description, dept_code):
     if not check_dept_code(dept_code) and check_course_id(course_id):
         return "Department Code or Course ID not valid"
@@ -375,7 +410,10 @@ def handle_section_entry(cursor, connector, course_id, semester, year, f_id, stu
     if not check_course_id(course_id):
         return "Course ID not valid"
 
-    if enter_section_data(cursor, connector, str(course_id), str(semester), year, str(f_id), int(students_enrolled)):
+    section_id = create_sectionID(cursor, course_id, semester, year)
+    # print(section_id)
+
+    if enter_section_data(cursor, connector, section_id, str(course_id), str(semester), year, str(f_id), int(students_enrolled)):
         return "Section data entered successfully."
     else: 
         return "Error entering section data. Please try again."
@@ -389,7 +427,7 @@ def handle_learningObjective_entry(cursor, connector, obj_code, obj_description)
 def handle_subObjective_entry(cursor, connector, obj_code, subObj_description):
     # create the sub-objective code 
     subObj_code = create_subObj_code(cursor, obj_code)
-    print(subObj_code)
+    # print(subObj_code)
 
     if enter_subObjective_data(cursor, connector, str(subObj_code), str(obj_code), str(subObj_description)):
         return "Sub-objective data entered successfully."
@@ -408,8 +446,10 @@ def handle_objCourse_assignment(cursor, connection, co_id, prog_name, obj_code):
     else:
         return "Error assigning objective to course."
 
-def handle_sectionEval_entry(cursor, connction, section_id, course_id, prog_name, obj_code, stud_met):
-    if enter_section_eval_results(cursor, connction, section_id, course_id, prog_name, obj_code, stud_met):
+#FIXME: might need to add smester and year to SectionEval table
+#   - need to ba able to check that stud_met (SectionEval) <= stud_enrolled (Section)
+def handle_sectionEval_entry(cursor, connction, section_id, course_id, prog_name, obj_code, stud_met, eval_type):
+    if enter_section_eval_results(cursor, connction, section_id, course_id, prog_name, obj_code, stud_met, eval_type):
         return "Entered section evaluation results successfully."
     else:
         return "Error entering section evaluation results."
@@ -447,7 +487,6 @@ def populate_course_eval_table(cursor, connection):
         print("Dummy data successfully inserted into the CourseEval table.")
     except Error as e:
         print(f"Error inserting dummy data into the CourseEval table: {e}")
-
 
 def populate_departments_table(cursor, connection):
     dummy_departments = [
@@ -611,27 +650,33 @@ def populate_all_tables(cursor, connection):
 def driver():
     
     """CHANGE THIS TO RUN"""
-    dbConn = create_connection("localhost", "root", "123456", "progDB")
+    dbConn = create_connection("localhost", "root", "beepboop", "progDB")
     # print(dbConn)
     cursor = dbConn.cursor()
-    # print(cursor)
     create_database(cursor, "progDB")
     clear_database(cursor, dbConn, tables)
     
     create_tables_from_file(cursor, "test_schema.sql", dbConn)
     
-    populate_all_tables(cursor, dbConn)
+    # populate_all_tables(cursor, dbConn)
     
     print(handle_department_entry(cursor, dbConn, "ABCD", "ABCD Department")) # good
     print(handle_faculty_entry(cursor, dbConn, "1111111", "Test Falc", "faltest@gmail.com", "ABCD", "Adjunct")) #good
     print(handle_program_entry(cursor, dbConn, "Test 2 Program", "1111111", "ABCD")) # good
-    print(handle_faculty_entry(cursor, dbConn, "1111113", "Test Falc 3", "faltest3@gmail.com", "ABCD", "boop")) #fail
+    # print(handle_faculty_entry(cursor, dbConn, "1111113", "Test Falc 3", "faltest3@gmail.com", "ABCD", "boop")) #fail
     #handle_course_entry(cursor, dbConn, "CS1111", "Test Course", "hello this course is for dunces like you", "0000")
     print(handle_course_entry(cursor, dbConn, "ABCD0001", "Learning Abc's", "learn something", "ABCD"))
+    print(handle_course_entry(cursor, dbConn, "ABCD3000", "Making Abc's", "making an alphabet", "ABCD"))
     print(handle_section_entry(cursor, dbConn, "ABCD0001", "Fall", 2023, "1111111", 20))
+    print(handle_section_entry(cursor, dbConn, "ABCD3000", "Fall", 2023, "1111111", 20))
+    print(handle_section_entry(cursor, dbConn, "ABCD0001", "Fall", 2023, "1111111", 10))
     print(handle_learningObjective_entry(cursor, dbConn, "LO1", "here is the decription"))
     print(handle_subObjective_entry(cursor, dbConn, "LO1", "here is the sub objective description"))
     print(handle_courseProgram_assignment(cursor, dbConn, "ABCD0001", "Test 2 Program"))
+    print(handle_objCourse_assignment(cursor, dbConn, "ABCD0001",  "Test 2 Program", "LO1"))
+    print(handle_sectionEval_entry(cursor, dbConn, "1", "ABCD0001", "Test 2 Program", "LO1", 20, "test"))
+
+    #TODO: test handle_sectionEval_entry
 
 
 driver()
