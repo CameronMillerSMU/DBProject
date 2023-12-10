@@ -88,8 +88,8 @@ def get_academic_year(cursor, academic_year):
                 FROM SectionEval se
                 LEFT JOIN ProgramCourse pc ON se.CourseID = pc.CourseID AND se.ProgramName = pc.ProgramName
                 LEFT JOIN Section s ON se.SectionID = s.SectionID AND se.CourseID = s.CourseID
-                WHERE s.SemesterName = %s
-            """, (semester_name,))
+                WHERE s.SemesterName = %s AND s.CourseYear = %s
+            """, (semester, year,))
 
             results = cursor.fetchall()
             academic_year_results.extend(results)

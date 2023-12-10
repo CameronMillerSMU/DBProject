@@ -500,7 +500,7 @@ class DatabaseGUI:
             result_text = "No results found. Please check academic year."
         else:
             result_text = ""
-            for program_name, objective_code, eval_type, students_met_obj in program_data:
+            for objective_code, eval_type, students_met_obj, course_id, program_name, section_id in program_data:
                 result_text += f"Program Name: {program_name}\nObjective Code: {objective_code}\nEvaluation Type: {eval_type}\nStudents Met Objective: {students_met_obj}\n\n"
         print(result_text)
 
