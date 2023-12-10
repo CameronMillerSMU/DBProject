@@ -3,6 +3,7 @@ import csv
 import mysql.connector as sql
 from mysql.connector import Error
 import re
+import random
 
 
 # '''General Database Functions'''
@@ -39,7 +40,6 @@ def check_course_id(c_id):
     match = re.match(id_pattern, c_id)
     return bool(match)
 
-
 '''Database Entry Helper Functions'''
 
 def check_dept_exists(cursor, dept_code):
@@ -64,7 +64,7 @@ def check_fal_exists(cursor, fal_id):
         if cursor.fetchall():
             return True
         
-        print("Faculty member does not exist. Please check faculty id")
+        print("Faculty member does not exist")
         return False
     except Error as e:
         print(f"Error executing Faculty Select: {e}")
@@ -120,6 +120,17 @@ def create_subObj_code(cursor, obj_code):
 
     code = str(obj_code) + "." + str(num)
     return code
+
+def create_new_faculty_id(cursor):
+    
+    while True:
+        rand_id = int(''.join([str(random.randint(0,9)) for _ in range(8)]))
+        if not check_fal_exists(cursor, rand_id):
+            return rand_id
+        else:
+            continue
+
+
 
 '''Database Entry Functions'''
 
@@ -351,11 +362,13 @@ def handle_department_entry(cursor, connection, dept_code, dept_name):
         return "There was an issue entering the information, please try again."
     
 def handle_faculty_entry(cursor, connection, fac_name, fac_email, dept_code, fac_rank = "Adjunct"):
+    fac_id = create_new_faculty_id(cursor)
+
     if not check_dept_code(dept_code):
         return "Department Code not valid"
     
     if verify_email(fac_email):
-        if enter_faculty_info(cursor, connection, fac_name, fac_email, dept_code, fac_rank):
+        if enter_faculty_info(cursor, connection, fac_id, fac_name, fac_email, dept_code, fac_rank):
             return "Faculty Info Stored Successfully"
     else:
         return "Email is not valid. Please try again."

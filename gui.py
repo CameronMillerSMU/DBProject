@@ -417,8 +417,9 @@ class DatabaseGUI:
         if not program_data:
             result_text = "Program does not exist. Please check program name."
         else:
-            program_id, program_name, program_coordinator_id, department_code = program_data
-            result_text = f"Program ID: {program_id}\nProgram Name: {program_name}\nProgram Coordinator ID: {program_coordinator_id}\nDepartment Code: {department_code}"
+            program_name, program_coordinator_id, department_code = program_data
+            #result_text = f"Program ID: {program_id}\nProgram Name: {program_name}\nProgram Coordinator ID: {program_coordinator_id}\nDepartment Code: {department_code}"
+            result_text = f"Program Name: {program_name}\nProgram Coordinator ID: {program_coordinator_id}\nDepartment Code: {department_code}"
         print(result_text)
 
     def execute_department_query(self, department_code):
@@ -456,5 +457,5 @@ if __name__ == "__main__":
     
     populate_all_tables(cursor, dbConn)
 
-    gui = DatabaseGUI(root, None, None)
+    gui = DatabaseGUI(root, cursor, dbConn)
     root.mainloop()
