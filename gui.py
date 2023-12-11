@@ -632,7 +632,7 @@ if __name__ == "__main__":
     
     create_tables_from_file(cursor, "test_schema.sql", dbConn)
     
-    # populate_all_tables(cursor, dbConn)
+    populate_all_tables(cursor, dbConn)
 
     gui = DatabaseGUI(root, cursor, dbConn)
     # gui = DatabaseGUI(root, None, None)
