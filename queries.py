@@ -5,8 +5,14 @@ import re
 # Queries
 def get_department(cursor, department_code):
     try:
-        cursor.execute("SELECT * FROM Department WHERE DepartmentCode = %s", (department_code,))
-        department_data = cursor.fetchone()
+        cursor.execute("""
+            SELECT d.*, p.ProgramName, f.FacultyName
+            FROM Department d
+            LEFT JOIN Program p ON d.DepartmentCode = p.DepartmentCode
+            LEFT JOIN Faculty f ON d.DepartmentCode = f.DepartmentCode
+            WHERE d.DepartmentCode = %s
+        """, (department_code,))
+        department_data = cursor.fetchall()
         if not department_data:
             return None
 
