@@ -75,14 +75,73 @@ def get_faculty(cursor, faculty_id):
         print("Invalid input or error:", e)
         return None
 
-def get_program(cursor, program_name):
-    try:
-        cursor.execute("SELECT * FROM Program WHERE ProgramName = %s", (program_name,))
-        program_data = cursor.fetchone()
-        if not program_data:
-            return None
+"""
+    Goal: 
+        1) return all courses in this program along with the sub(objectives) associated with it
+        2) return all of the objectives for a given program 
 
-        return program_data
+"""
+def get_program(cursor, program_name):
+    courses = get_all_courses(cursor, program_name)
+
+    objectives = get_objs_by_prog(cursor, program_name)
+
+    return courses, objectives 
+    # try:
+    #     cursor.execute("SELECT * FROM Program WHERE ProgramName = %s", (program_name,))
+    #     program_data = cursor.fetchone()
+    #     if not program_data:
+    #         return None
+
+    #     return program_data
+
+    # except Error as e:
+    #     print("Invalid input or error:", e)
+    #     return None
+"""
+    Returns all courses and their corresponding objectives given a program nam
+"""
+def get_all_courses(cursor, prog_name):
+    try:
+        command = "SELECT se.courseID, c.courseTitle, se.ObjectiveCode, so.SubObjectiveCode, s.CourseYear \
+        FROM courseEval se, learningobjective lo, subobjective so, course c, section s \
+        WHERE se.ObjectiveCode = lo.ObjectiveCode \
+        AND  se.courseID = c.courseID \
+        AND s.CourseID = se.CourseID \
+        AND s.CourseID = c.CourseID \
+        AND lo.ObjectiveCode = so.ObjectiveCode \
+        AND se.ObjectiveCode = so.ObjectiveCode \
+        AND se.programName = '%s'" % (prog_name)
+        cursor.execute(command)
+
+        all_prog_course = cursor.fetchall()
+
+        if all_prog_course is not None:
+            return all_prog_course
+        else:
+            return "No courses for this program"
+
+    except Error as e:
+        print("Invalid input or error:", e)
+        return None
+
+"""
+    Returns all objectives assigned to a certain program
+"""
+def get_objs_by_prog(cursor, prog_name):
+    try:
+        command = "SELECT DISTINCT lo.ObjectiveCode, lo.ObjectiveDescription \
+        FROM courseeval, learningobjective lo \
+        WHERE courseeval.ObjectiveCode = lo.ObjectiveCode \
+        AND ProgramName = '%s'" % (prog_name)
+        cursor.execute(command)
+
+        objectives = cursor.fetchall()
+
+        if objectives is not None:
+            return objectives
+        else:
+            return "No objectives for this program"
 
     except Error as e:
         print("Invalid input or error:", e)
@@ -91,10 +150,10 @@ def get_program(cursor, program_name):
 def get_section_eval_results(cursor, semester_name, program_name):
     try:
         cursor.execute("""
-            SELECT se.SectionID, se.CourseID, se.ProgramName, se.ObjectiveCode, se.EvalType, se.StudentsMetObj
-            FROM SectionEval se
-            INNER JOIN Section s ON se.SectionID = s.SectionID AND se.CourseID = s.CourseID
-            WHERE s.SemesterName = %s AND se.ProgramName = %s
+        SELECT s.SectionID, s.CourseID, se.ProgramName, se.ObjectiveCode, se.EvalType, se.StudentsMetObj
+        FROM Section s
+        LEFT JOIN SectionEval se ON s.SectionID = se.SectionID AND s.CourseID = se.CourseID
+        WHERE s.SemesterName = %s AND se.ProgramName = %s;
         """, (semester_name, program_name))
         
         section_eval_results = cursor.fetchall()
@@ -130,11 +189,13 @@ def get_academic_year(cursor, academic_year):
             semester_name = f"{semester} {year}"
 
             cursor.execute("""
-                SELECT se.ObjectiveCode, se.EvalType, se.StudentsMetObj, pc.CourseID, pc.ProgramName, se.SectionID
-                FROM SectionEval se
-                LEFT JOIN ProgramCourse pc ON se.CourseID = pc.CourseID AND se.ProgramName = pc.ProgramName
-                LEFT JOIN Section s ON se.SectionID = s.SectionID AND se.CourseID = s.CourseID
-                WHERE s.SemesterName = %s AND s.CourseYear = %s
+            SELECT se.ObjectiveCode, so.SubObjectiveCode, c.CourseID, s.SectionID, s.SemesterName, s.CourseYear, se.EvalType, se.StudentsMetObj
+            FROM  SectionEval se
+            LEFT JOIN SubObjective so ON se.ObjectiveCode = so.ObjectiveCode
+            LEFT JOIN CourseEval ce ON se.CourseID = ce.CourseID AND ce.ProgramName = se.ProgramName AND ce.ObjectiveCode = se.ObjectiveCode
+            LEFT JOIN Section s ON se.SectionID = s.SectionID AND se.CourseID = s.CourseID
+            LEFT JOIN Course c ON s.CourseID = c.CourseID
+            WHERE s.semesterName = %s AND s.CourseYear = %s
             """, (semester, year,))
 
             results = cursor.fetchall()

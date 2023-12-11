@@ -5,6 +5,7 @@ from data_entry import *
 def populate_course_table(cursor, connection):
     dummy_courses = [
         ("CS0001", "Introduction to Computer Science", "Fundamental concepts of programming.", "CS"),
+        ("CS1341", "Introduction to Python", "Fundamental concepts of programming in python.", "CS"),
         ("EN0001", "Engineering Basics", "Introduction to engineering principles.", "EN"),
         ("BIO0001", "Introduction to Biology", "Basic concepts in biology.", "BIO"),
     ]
@@ -21,7 +22,12 @@ def populate_course_table(cursor, connection):
 def populate_course_eval_table(cursor, connection):
     dummy_course_evals = [
         ("CS0001", "Computer Science Program", "LO001"),
+        ("CS1341", "Computer Science Program", "LO002"),
+        ("CS0001", "Computer Science Program", "LO003"),
         ("EN0001", "Engineering Program", "LO002"),
+        ("CS1341", "Engineering Program", "LO002"),
+        ("CS1341", "Engineering Program", "LO001"),
+        ("CS1341", "Engineering Program", "LO003"),
         ("BIO0001", "Biology Program", "LO003"),
     ]
 
@@ -102,6 +108,8 @@ def populate_program_table(cursor, connection):
 def populate_program_course_table(cursor, connection):
     dummy_program_courses = [
         ("CS0001", "Computer Science Program"),
+        ("CS1341", "Computer Science Program"),
+        ("CS1341", "Engineering Program"),
         ("EN0001", "Engineering Program"),
         ("BIO0001", "Biology Program"),
     ]
@@ -118,6 +126,8 @@ def populate_program_course_table(cursor, connection):
 def populate_program_objective_table(cursor, connection):
     dummy_program_objectives = [
         ("Computer Science Program", "LO001"),
+        ("Computer Science Program", "LO002"),
+        ("Computer Science Program", "LO003"),
         ("Engineering Program", "LO002"),
         ("Biology Program", "LO003"),
     ]
@@ -134,6 +144,8 @@ def populate_program_objective_table(cursor, connection):
 def populate_section_table(cursor, connection):
     dummy_sections = [
         (1, "CS0001", "Fall", 2023, "F001", 30),
+        (1, "CS1341", "Fall", 2023, "F001", 30),
+        (2, "CS1341", "Fall", 2023, "F001", 30),
         (2, "EN0001", "Spring", 2023, "F002", 25),
         (3, "BIO0001", "Summer", 2023, "F003", 20),
     ]
@@ -150,6 +162,8 @@ def populate_section_table(cursor, connection):
 def populate_section_eval_table(cursor, connection):
     dummy_section_evals = [
         (1, "CS0001", "Computer Science Program", "LO001", "Exam", 25),
+        (1, "CS1341", "Computer Science Program", "LO002", "Program", 25),
+        (2, "CS1341", "Computer Science Program", "LO002", None, None),
         (2, "EN0001", "Engineering Program", "LO002", "Project", 20),
         (3, "BIO0001", "Biology Program", "LO003", "Quiz", 15),
     ]

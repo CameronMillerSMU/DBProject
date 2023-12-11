@@ -534,14 +534,22 @@ class DatabaseGUI:
 
 
     def execute_program_query(self, program_name):
-        program_data = get_program(self.cursor, program_name)
+        courses, objectives = get_program(self.cursor, program_name)
 
-        if not program_data:
-            result_text = "Program does not exist. Please check program name."
+        if not courses:
+            result_text = "No courses for this program."
         else:
-            program_name, program_coordinator_id, department_code = program_data
-            #result_text = f"Program ID: {program_id}\nProgram Name: {program_name}\nProgram Coordinator ID: {program_coordinator_id}\nDepartment Code: {department_code}"
-            result_text = f"Program Name: {program_name}\nProgram Coordinator ID: {program_coordinator_id}\nDepartment Code: {department_code}"
+            result_text = ""
+            print("Courses: ", courses)
+            for row in courses:
+                #print("Row: ", row)
+                course_id, course_title, obj_code, sub_obj_code, course_year = row 
+                result_text += f"Course: {course_id} {course_title}\n\tObjective: {obj_code}, SubObjective: {sub_obj_code} Year: {course_year}\n\n"
+
+            for row in objectives:
+                obj_code, obj_desc = row
+                result_text += f"Objective Code: {obj_code}\n\tDescription: {obj_desc}\n\n"
+
         print(result_text)
 
         self.destroy_result_label()
@@ -603,8 +611,9 @@ class DatabaseGUI:
             result_text = "No results found. Please check academic year."
         else:
             result_text = ""
-            for objective_code, eval_type, students_met_obj, course_id, program_name, section_id in program_data:
-                result_text += f"Program Name: {program_name}\nObjective Code: {objective_code}\nEvaluation Type: {eval_type}\nStudents Met Objective: {students_met_obj}\n\n"
+            for objective_code, sub_obj_code, course_id, section_id, semester, year, eval_type, students_met_obj  in program_data:
+                result_text += f"Course: {course_id}  Section:{section_id} {semester} {year}\n"
+                result_text += f"Objective Code: {objective_code}\n SubObjective Code: {sub_obj_code}\nEvaluation Type: {eval_type}\nStudents Met Objective: {students_met_obj}\n\n"
         print(result_text)
 
         self.destroy_result_label()

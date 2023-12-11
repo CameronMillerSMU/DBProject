@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS SubObjective (
 CREATE TABLE IF NOT EXISTS ProgramCourse (
     CourseID VARCHAR(8),
     ProgramName VARCHAR(255),
-    PRIMARY KEY (ProgramName),
+    PRIMARY KEY (ProgramName, CourseID),
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
     FOREIGN KEY (ProgramName) REFERENCES Program(ProgramName)
 );
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS CourseEval (
     CourseID VARCHAR(8),
     ProgramName VARCHAR(255),
     ObjectiveCode VARCHAR(10),
-    PRIMARY KEY (CourseID, ProgramName),
+    PRIMARY KEY (CourseID, ProgramName, ObjectiveCode),
     FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
     FOREIGN KEY (ProgramName) REFERENCES Program(ProgramName),
     FOREIGN KEY (ObjectiveCode) REFERENCES LearningObjective(ObjectiveCode)
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS SectionEval (
 CREATE TABLE IF NOT EXISTS ProgramObjective (
     ProgramName VARCHAR(255),
     ObjectiveCode VARCHAR(10),
-    PRIMARY KEY (ProgramName),
+    PRIMARY KEY (ProgramName, ObjectiveCode),
     FOREIGN KEY (ProgramName) REFERENCES Program(ProgramName),
     FOREIGN KEY (ObjectiveCode) REFERENCES LearningObjective(ObjectiveCode)
 );
