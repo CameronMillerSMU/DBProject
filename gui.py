@@ -195,7 +195,7 @@ class DatabaseGUI:
         faculty_name_entry = tk.Entry(self.master)
         faculty_name_entry.pack()
 
-        faculty_email_label = tk.Label(self.master, text=f"{selected_value} Email (max 255 characters):")
+        faculty_email_label = tk.Label(self.master, text=f"{selected_value} Email (ex: john@example.com):")
         faculty_email_label.pack()
 
         faculty_email_entry = tk.Entry(self.master)
