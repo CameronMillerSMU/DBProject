@@ -542,13 +542,23 @@ class DatabaseGUI:
         if not department_data:
             result_text = "Department does not exist. Please check department code."
         else:
-            department_name, department_code = department_data
-            result_text = f"Department Name: {department_name}\nDepartment Code: {department_code}"
-        print(result_text)
+            result_text = ""
+            for row in department_data:
+                department_code, department_name, program_name, faculty_name, faculty_rank = row
+                result_text += f"Department Code: {department_code}\nDepartment Name: {department_name}\n"
+
+                if program_name:
+                    result_text += f"Program: {program_name}\n"
+
+                if faculty_name:
+                    result_text += f"Faculty: {faculty_name} (Rank: {faculty_rank})\n"
+
+                result_text += "\n"
 
         self.destroy_result_label()
         self.result_label = tk.Label(self.master, text=result_text)
         self.result_label.pack()
+
 
     def execute_semester_program_query(self, semester_name, program_name):
         program_data = get_section_eval_results(self.cursor, semester_name, program_name)
