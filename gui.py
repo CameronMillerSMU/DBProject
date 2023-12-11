@@ -602,8 +602,9 @@ class DatabaseGUI:
             result_text = "No results found. Please check academic year."
         else:
             result_text = ""
-            for objective_code, eval_type, students_met_obj, course_id, program_name, section_id in program_data:
-                result_text += f"Program Name: {program_name}\nObjective Code: {objective_code}\nEvaluation Type: {eval_type}\nStudents Met Objective: {students_met_obj}\n\n"
+            for objective_code, sub_obj_code, course_id, section_id, semester, year, eval_type, students_met_obj  in program_data:
+                result_text += f"Course: {course_id}  Section:{section_id} {semester} {year}\n"
+                result_text += f"Objective Code: {objective_code}\n SubObjective Code: {sub_obj_code}\nEvaluation Type: {eval_type}\nStudents Met Objective: {students_met_obj}\n\n"
         print(result_text)
 
         self.destroy_result_label()

@@ -123,10 +123,10 @@ def get_objs_by_prog(cursor, prog_name):
 def get_section_eval_results(cursor, semester_name, program_name):
     try:
         cursor.execute("""
-            SELECT se.SectionID, se.CourseID, se.ProgramName, se.ObjectiveCode, se.EvalType, se.StudentsMetObj
-            FROM SectionEval se
-            INNER JOIN Section s ON se.SectionID = s.SectionID AND se.CourseID = s.CourseID
-            WHERE s.SemesterName = %s AND se.ProgramName = %s
+        SELECT s.SectionID, s.CourseID, se.ProgramName, se.ObjectiveCode, se.EvalType, se.StudentsMetObj
+        FROM Section s
+        LEFT JOIN SectionEval se ON s.SectionID = se.SectionID AND s.CourseID = se.CourseID
+        WHERE s.SemesterName = %s AND se.ProgramName = %s;
         """, (semester_name, program_name))
         
         section_eval_results = cursor.fetchall()
@@ -162,11 +162,13 @@ def get_academic_year(cursor, academic_year):
             semester_name = f"{semester} {year}"
 
             cursor.execute("""
-                SELECT se.ObjectiveCode, se.EvalType, se.StudentsMetObj, pc.CourseID, pc.ProgramName, se.SectionID
-                FROM SectionEval se
-                LEFT JOIN ProgramCourse pc ON se.CourseID = pc.CourseID AND se.ProgramName = pc.ProgramName
-                LEFT JOIN Section s ON se.SectionID = s.SectionID AND se.CourseID = s.CourseID
-                WHERE s.SemesterName = %s AND s.CourseYear = %s
+            SELECT se.ObjectiveCode, so.SubObjectiveCode, c.CourseID, s.SectionID, s.SemesterName, s.CourseYear, se.EvalType, se.StudentsMetObj
+            FROM  SectionEval se
+            LEFT JOIN SubObjective so ON se.ObjectiveCode = so.ObjectiveCode
+            LEFT JOIN CourseEval ce ON se.CourseID = ce.CourseID AND ce.ProgramName = se.ProgramName AND ce.ObjectiveCode = se.ObjectiveCode
+            LEFT JOIN Section s ON se.SectionID = s.SectionID AND se.CourseID = s.CourseID
+            LEFT JOIN Course c ON s.CourseID = c.CourseID
+            WHERE s.semesterName = %s AND s.CourseYear = %s
             """, (semester, year,))
 
             results = cursor.fetchall()

@@ -144,6 +144,7 @@ def populate_section_table(cursor, connection):
     dummy_sections = [
         (1, "CS0001", "Fall", 2023, "F001", 30),
         (1, "CS1341", "Fall", 2023, "F001", 30),
+        (2, "CS1341", "Fall", 2023, "F001", 30),
         (2, "EN0001", "Spring", 2023, "F002", 25),
         (3, "BIO0001", "Summer", 2023, "F003", 20),
     ]
@@ -160,6 +161,8 @@ def populate_section_table(cursor, connection):
 def populate_section_eval_table(cursor, connection):
     dummy_section_evals = [
         (1, "CS0001", "Computer Science Program", "LO001", "Exam", 25),
+        (1, "CS1341", "Computer Science Program", "LO002", "Program", 25),
+        (2, "CS1341", "Computer Science Program", "LO002", None, None),
         (2, "EN0001", "Engineering Program", "LO002", "Project", 20),
         (3, "BIO0001", "Biology Program", "LO003", "Quiz", 15),
     ]
