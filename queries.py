@@ -3,9 +3,6 @@ from mysql.connector import Error
 import re
 
 # Queries
-# def get_department_details(department_faculty, department_data):
-#     department_details = department_faculty, department_data
-#     return department_details
 def get_department_faculty(cursor, department_code):
     try:
         cursor.execute('''
@@ -13,15 +10,7 @@ def get_department_faculty(cursor, department_code):
             FROM Faculty f
             LEFT JOIN Program p ON f.FacultyID = p.ProgramCoordinatorID
             WHERE f.DepartmentCode = %s''', (department_code,))
-       
-        # cursor.execute("""
-        #     SELECT f.FacultyID, f.FacultyName, f.FacultyRank
-        #     FROM Department d
-        #     LEFT JOIN Program p ON d.DepartmentCode = p.DepartmentCode
-        #     LEFT JOIN Faculty f ON d.DepartmentCode = f.DepartmentCode
-        #     WHERE d.DepartmentCode = %s
-        # """, (department_code,))
-
+    
         department_faculty = cursor.fetchall()
         if not department_faculty:
             return None
@@ -87,17 +76,6 @@ def get_program(cursor, program_name):
     objectives = get_objs_by_prog(cursor, program_name)
 
     return courses, objectives 
-    # try:
-    #     cursor.execute("SELECT * FROM Program WHERE ProgramName = %s", (program_name,))
-    #     program_data = cursor.fetchone()
-    #     if not program_data:
-    #         return None
-
-    #     return program_data
-
-    # except Error as e:
-    #     print("Invalid input or error:", e)
-    #     return None
 """
     Returns all courses and their corresponding objectives given a program nam
 """
