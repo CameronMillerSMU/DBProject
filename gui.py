@@ -32,10 +32,18 @@ class DatabaseGUI:
         if hasattr(self, 'result_label'):
             self.result_label.destroy()
 
-    def show_entry_options(self):
+    def destroy_option_widgets(self):
+        # destroy the previous options
+        for widget in self.option_widgets.values():
+            widget.destroy()
+
+    def destroy_selected_option_label(self):
         # destroy the previous selected option label
         if hasattr(self, 'selected_option_label'):
             self.selected_option_label.destroy()
+
+    def show_entry_options(self):
+        self.destroy_selected_option_label()
 
         # destroy the previous selected option label
         self.destroy_result_label()
@@ -45,9 +53,7 @@ class DatabaseGUI:
         self.show_options(entry_options)
 
     def show_query_options(self):
-        # destroy the previous selected option label
-        if hasattr(self, 'selected_option_label'):
-            self.selected_option_label.destroy()
+        self.destroy_selected_option_label()
 
         # destroy the previous selected option label
         self.destroy_result_label()
@@ -75,15 +81,11 @@ class DatabaseGUI:
         option_button = tk.Button(self.master, text="Submit", command=lambda: self.handle_option(option_var.get(), option_dropdown.get()))
         option_button.pack()
 
-        # Keep track of added widgets for clearing later
         self.option_widgets["option_label"] = option_label
         self.option_widgets["option_dropdown"] = option_dropdown
         self.option_widgets["option_button"] = option_button
 
-    def destroy_option_widgets(self):
-        # destroy the previous widgets
-        for widget in self.option_widgets.values():
-            widget.destroy()
+    
 
     def handle_option(self, selected_option, selected_value):
         self.destroy_result_label()
@@ -341,7 +343,6 @@ class DatabaseGUI:
     def show_section_evaluation_entry_form(self, selected_value):
         self.destroy_option_widgets()
 
-        # gathered for selection
         objective_code_label = tk.Label(self.master, text=f"{selected_value} Objective Code (max 10 characters):")
         objective_code_label.pack()
 
@@ -366,9 +367,6 @@ class DatabaseGUI:
         prog_entry = tk.Entry(self.master)
         prog_entry.pack()
 
-
-
-        #actual updated value
         stud_met_label = tk.Label(self.master, text=f"{selected_value} Students Met:")
         stud_met_label.pack()
 
@@ -382,7 +380,6 @@ class DatabaseGUI:
         eval_type_entry.pack()
         
 
-        #execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_learning_objective_entry(objective_code_entry.get(), objective_description_entry.get()))
         execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_section_eval_entry(sec_id_entry.get(), course_id_entry.get(), prog_entry.get(), objective_code_entry.get(), int(stud_met_entry.get()), eval_type_entry.get()))
         execute_button.pack()
 
@@ -486,7 +483,6 @@ class DatabaseGUI:
         execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_department_query(department_code_entry.get()))
         execute_button.pack()
 
-        # Keep track of added widgets for clearing later
         self.option_widgets["department_code_label"] = department_code_label
         self.option_widgets["department_code_entry"] = department_code_entry
         self.option_widgets["execute_button"] = execute_button
@@ -542,7 +538,6 @@ class DatabaseGUI:
             result_text = ""
             print("Courses: ", courses)
             for row in courses:
-                #print("Row: ", row)
                 course_id, course_title, obj_code, sub_obj_code, course_year = row 
                 result_text += f"Course: {course_id} {course_title}\n\tObjective: {obj_code}, SubObjective: {sub_obj_code} Year: {course_year}\n\n"
 
@@ -559,6 +554,7 @@ class DatabaseGUI:
     def execute_department_query(self, department_code):
         # gets the faculty members, their id, and program their in charge of (if any)
         department_faculty = get_department_faculty(self.cursor, department_code)
+
         # gets all the programs of the department
         department_program = get_department_program(self.cursor, department_code)
 
