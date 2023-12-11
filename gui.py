@@ -549,27 +549,32 @@ class DatabaseGUI:
         self.result_label.pack()
 
     def execute_department_query(self, department_code):
-        # gets all the programs 
-        # gets the faculty members and their id 
-        # 
-        department_data = get_department_details(self.cursor, department_code)
-        print(department_data)
-        
-        if not department_data:
+        # gets the faculty members, their id, and program their in charge of (if any)
+        department_faculty = get_department_faculty(self.cursor, department_code)
+        # gets all the programs of the department
+        department_program = get_department_program(self.cursor, department_code)
+
+        if not department_faculty and not department_program:
             result_text = "Department does not exist. Please check department code."
         else:
             result_text = ""
-            for row in department_data:
-                department_code, department_name, program_name, faculty_name, faculty_rank = row
-                result_text += f"Department Code: {department_code}\nDepartment Name: {department_name}\n"
-
+            print_dept = True
+            for row in department_program:
+                department_code, department_name, program_name = row
+                if print_dept:
+                    result_text += f"Department Code: {department_code} \tDepartment Name: {department_name}\n"
+                    print_dept = False
+                
                 if program_name:
                     result_text += f"Program: {program_name}\n"
 
-                if faculty_name:
-                    result_text += f"Faculty: {faculty_name} (Rank: {faculty_rank})\n"
-
                 result_text += "\n"
+            for row in department_faculty:
+                f_id, f_name, rank, prog_name = row
+                result_text += f"Faculty ID: {f_id}  Faculty Name: {f_name}  Rank: {rank}  Program in Charge Of: {prog_name}\n"
+                result_text += "\n"
+
+                
 
         self.destroy_result_label()
         self.result_label = tk.Label(self.master, text=result_text)

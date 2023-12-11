@@ -53,6 +53,7 @@ def populate_departments_table(cursor, connection):
 def populate_faculty_table(cursor, connection):
     dummy_faculty = [
         ("F001", "John Doe", "john.doe@example.com", "Full", "CS"),
+        ("F004", "Boop the Scoop", "boop@example.com", "Adjunct", "CS"),
         ("F002", "Jane Smith", "jane.smith@example.com", "Associate", "EN"),
         ("F003", "Bob Johnson", "bob.johnson@example.com", "Assistant", "BIO"),
     ]

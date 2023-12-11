@@ -3,21 +3,48 @@ from mysql.connector import Error
 import re
 
 # Queries
-def get_department(cursor, department_code):
+# def get_department_details(department_faculty, department_data):
+#     department_details = department_faculty, department_data
+#     return department_details
+def get_department_faculty(cursor, department_code):
     try:
-        cursor.execute("""
-            SELECT d.*, p.ProgramName, f.FacultyName, f.FacultyRank
-            FROM Department d
-            LEFT JOIN Program p ON d.DepartmentCode = p.DepartmentCode
-            LEFT JOIN Faculty f ON d.DepartmentCode = f.DepartmentCode
-            WHERE d.DepartmentCode = %s
-        """, (department_code,))
+        cursor.execute('''
+            SELECT f.FacultyID, f.FacultyName, f.FacultyRank, p.ProgramName
+            FROM Faculty f
+            LEFT JOIN Program p ON f.FacultyID = p.ProgramCoordinatorID
+            WHERE f.DepartmentCode = %s''', (department_code,))
+       
+        # cursor.execute("""
+        #     SELECT f.FacultyID, f.FacultyName, f.FacultyRank
+        #     FROM Department d
+        #     LEFT JOIN Program p ON d.DepartmentCode = p.DepartmentCode
+        #     LEFT JOIN Faculty f ON d.DepartmentCode = f.DepartmentCode
+        #     WHERE d.DepartmentCode = %s
+        # """, (department_code,))
 
-        department_details = cursor.fetchall()
-        if not department_details:
+        department_faculty = cursor.fetchall()
+        if not department_faculty:
             return None
 
-        return department_details
+        return department_faculty
+
+    except Error as e:
+        print("Invalid input or error:", e)
+        return None
+
+def get_department_program(cursor, department_code):
+    try:
+        cursor.execute("""
+            SELECT d.*, ProgramName
+            FROM Program p, Department d
+            WHERE p.DepartmentCode = d.DepartmentCode
+            AND p.DepartmentCode = %s """, (department_code,))
+
+        department_program = cursor.fetchall()
+        if not department_program:
+            return None
+
+        return department_program
 
     except Error as e:
         print("Invalid input or error:", e)
