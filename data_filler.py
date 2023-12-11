@@ -1,5 +1,4 @@
 from data_entry import *
-import random
 
 
 ''' Test Populate Functions ''' # do not need to use functions 
@@ -57,13 +56,14 @@ def populate_departments_table(cursor, connection):
     except Error as e:
         print(f"Error inserting dummy data into the Departments table: {e}")
 
-
 def populate_faculty_table(cursor, connection):
     dummy_faculty = [
-        (str(random.randint(10000000, 99999999)), "John Doe", "john.doe@example.com", "Full", "CS"),
-        (str(random.randint(10000000, 99999999)), "Boop the Scoop", "boop@example.com", "Adjunct", "CS"),
-        (str(random.randint(10000000, 99999999)), "Jane Smith", "jane.smith@example.com", "Associate", "EN"),
-        (str(random.randint(10000000, 99999999)), "Bob Johnson", "bob.johnson@example.com", "Assistant", "BIO"),
+        
+
+        ("F001", "John Doe", "john.doe@example.com", "Full", "CS"),
+        ("F004", "Boop the Scoop", "boop@example.com", "Adjunct", "CS"),
+        ("F002", "Jane Smith", "jane.smith@example.com", "Associate", "EN"),
+        ("F003", "Bob Johnson", "bob.johnson@example.com", "Assistant", "BIO"),
     ]
 
     try:
