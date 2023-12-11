@@ -15,6 +15,7 @@ The enter_[table_name]_data() functions return True or False based on if the dat
 Things to fix later:
 * System creating objective code for LearningObjective table
 * SemesterID autoincrement fix 
+* add entry data to the return messages 
 
 
 This is in no way, shape or form safe against SQL injections 
@@ -56,6 +57,10 @@ report should contain:
     * An implementation manual to describe the program. Describe the various functions/method/classes and what each of them do
 
 
+
+Presentation 
+
+Into
 
 
 ## Database Schema and Description 

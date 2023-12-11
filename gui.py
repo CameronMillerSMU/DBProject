@@ -118,9 +118,19 @@ class DatabaseGUI:
         elif self.action_var.get() == "Entry" and selected_option == "Section Evaluation":
             self.show_section_evaluation_entry_form(selected_value)
 
+
     def show_program_entry_form(self, selected_value):
         self.destroy_option_widgets()
 
+        # show faculty and their IDs
+        all_faculty_label = tk.Label(self.master, text="All current faculty: ")
+        all_faculty_label.pack()
+
+        all_faculty_text = tk.Text(self.master)
+        all_faculty_text.insert(tk.END, get_all_faculty(self.cursor))
+        all_faculty_text.pack()
+
+        # show form
         program_name_label = tk.Label(self.master, text=f"{selected_value} Name (max 255 characters):")
         program_name_label.pack()
 
@@ -148,6 +158,8 @@ class DatabaseGUI:
         self.option_widgets["program_coordinator_entry"] = program_coordinator_entry
         self.option_widgets["department_code_label"] = department_code_label
         self.option_widgets["department_code_entry"] = department_code_entry
+        self.option_widgets["all_faculty_text"] = all_faculty_text
+        self.option_widgets["all_faculty_label"] = all_faculty_label
         self.option_widgets["execute_button"] = execute_button
 
     def show_department_entry_form(self, selected_value):

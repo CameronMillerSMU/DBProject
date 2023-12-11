@@ -7,9 +7,9 @@ CREATE TABLE IF NOT EXISTS Department (
 
 -- Faculty Table
 CREATE TABLE IF NOT EXISTS Faculty (
-    FacultyID VARCHAR(10),
+    FacultyID VARCHAR(10) UNIQUE,
     FacultyName VARCHAR(255),
-    FacultyEmail VARCHAR(255),
+    FacultyEmail VARCHAR(255) UNIQUE,
     FacultyRank VARCHAR(20), -- full, associate, assistant, adjunct
     DepartmentCode VARCHAR(4),
     PRIMARY KEY (FacultyID),

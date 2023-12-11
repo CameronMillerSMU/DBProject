@@ -23,7 +23,17 @@ def get_department(cursor, department_code):
         print("Invalid input or error:", e)
         return None
 
-
+def get_all_faculty(cursor):
+    try:
+        cursor.execute("SELECT * FROM Faculty")
+        all_faculty = cursor.fetchall()
+        if all_faculty is not None:
+            return "\n".join(map(str, all_faculty))
+        else:
+            return "There are no faculty"
+    except Error as e:
+        print("Invalid input or error: ", e)
+        return "Could not retrieve all faculty"
 
 def get_faculty(cursor, faculty_id):
     try:
