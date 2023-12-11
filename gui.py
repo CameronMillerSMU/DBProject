@@ -572,10 +572,15 @@ class DatabaseGUI:
                     result_text += f"Program: {program_name}\n"
 
                 result_text += "\n"
-            for row in department_faculty:
-                f_id, f_name, rank, prog_name = row
-                result_text += f"Faculty ID: {f_id}  Faculty Name: {f_name}  Rank: {rank}  Program in Charge Of: {prog_name}\n"
-                result_text += "\n"
+                
+            # if there are faculty members in the department
+            if department_faculty:
+                for row in department_faculty:
+                    f_id, f_name, rank, prog_name = row
+                    result_text += f"Faculty ID: {f_id}  Faculty Name: {f_name}  Rank: {rank}  Program in Charge Of: {prog_name}\n"
+                    result_text += "\n"
+            else:
+                result_text += "There are no faculty in this department."
 
                 
 
