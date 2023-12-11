@@ -42,10 +42,13 @@ class DatabaseGUI:
         if hasattr(self, 'selected_option_label'):
             self.selected_option_label.destroy()
 
+    def destroy_selection_label(self):
+        # destroy the previous selection label
+        if hasattr(self, 'selection_label'):
+            self.selection_label.destroy()
+
     def show_entry_options(self):
         self.destroy_selected_option_label()
-
-        # destroy the previous selected option label
         self.destroy_result_label()
 
         entry_options = ["Program", "Department", "Faculty", "Course", "Section", "Learning Objective", "Section Evaluation"]
@@ -54,8 +57,6 @@ class DatabaseGUI:
 
     def show_query_options(self):
         self.destroy_selected_option_label()
-
-        # destroy the previous selected option label
         self.destroy_result_label()
 
         query_options = ["Department", "Program", "Semester Program Results", "Academic Year Program Results"]
@@ -63,9 +64,7 @@ class DatabaseGUI:
         self.show_options(query_options)
 
     def show_options(self, options):
-        # destroy the previous widgets
-        if hasattr(self, 'selection_label'):
-            self.selection_label.destroy()
+        self.destroy_selection_label()
         self.destroy_option_widgets()
 
         # show "Select Option (Entry)" or "Select Option (Query)" depending on selected action
@@ -620,16 +619,16 @@ class DatabaseGUI:
 if __name__ == "__main__":
     root = tk.Tk()
 
-    # """CHANGE THIS TO RUN"""
-    # dbConn = create_connection("localhost", "root", "beepboop", "progDB")
-    # cursor = dbConn.cursor()
-    # create_database(cursor, "progDB")
-    # clear_database(cursor, dbConn, tables)
+    """CHANGE THIS TO RUN"""
+    dbConn = create_connection("localhost", "root", "beepboop", "progDB")
+    cursor = dbConn.cursor()
+    create_database(cursor, "progDB")
+    clear_database(cursor, dbConn, tables)
     
-    # create_tables_from_file(cursor, "test_schema.sql", dbConn)
+    create_tables_from_file(cursor, "test_schema.sql", dbConn)
     
-    # populate_all_tables(cursor, dbConn)
+    populate_all_tables(cursor, dbConn)
 
-    # gui = DatabaseGUI(root, cursor, dbConn)
-    gui = DatabaseGUI(root, None, None)
+    gui = DatabaseGUI(root, cursor, dbConn)
+    # gui = DatabaseGUI(root, None, None)
     root.mainloop()
