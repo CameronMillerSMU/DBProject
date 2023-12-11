@@ -4,9 +4,9 @@ from data_entry import *
 ''' Test Populate Functions ''' # do not need to use functions 
 def populate_course_table(cursor, connection):
     dummy_courses = [
-        ("CS010001", "Introduction to Computer Science", "Fundamental concepts of programming.", "CS01"),
-        ("EN010001", "Engineering Basics", "Introduction to engineering principles.", "EN01"),
-        ("BO010001", "Introduction to Biology", "Basic concepts in biology.", "BO01"),
+        ("CS0001", "Introduction to Computer Science", "Fundamental concepts of programming.", "CS"),
+        ("EN0001", "Engineering Basics", "Introduction to engineering principles.", "EN"),
+        ("BIO0001", "Introduction to Biology", "Basic concepts in biology.", "BIO"),
     ]
 
     try:
@@ -20,9 +20,9 @@ def populate_course_table(cursor, connection):
 
 def populate_course_eval_table(cursor, connection):
     dummy_course_evals = [
-        ("CS010001", "Computer Science Program", "LO001"),
-        ("EN010001", "Engineering Program", "LO002"),
-        ("BO010001", "Biology Program", "LO003"),
+        ("CS0001", "Computer Science Program", "LO001"),
+        ("EN0001", "Engineering Program", "LO002"),
+        ("BIO0001", "Biology Program", "LO003"),
     ]
 
     try:
@@ -36,9 +36,9 @@ def populate_course_eval_table(cursor, connection):
 
 def populate_departments_table(cursor, connection):
     dummy_departments = [
-        ("CS01", "Computer Science"),
-        ("EN01", "Engineering"),
-        ("BO01", "Biology"),
+        ("CS", "Computer Science"),
+        ("EN", "Engineering"),
+        ("BIO", "Biology"),
     ]
 
     try:
@@ -52,9 +52,9 @@ def populate_departments_table(cursor, connection):
 
 def populate_faculty_table(cursor, connection):
     dummy_faculty = [
-        ("F001", "John Doe", "john.doe@example.com", "Full", "CS01"),
-        ("F002", "Jane Smith", "jane.smith@example.com", "Associate", "EN01"),
-        ("F003", "Bob Johnson", "bob.johnson@example.com", "Assistant", "BO01"),
+        ("F001", "John Doe", "john.doe@example.com", "Full", "CS"),
+        ("F002", "Jane Smith", "jane.smith@example.com", "Associate", "EN"),
+        ("F003", "Bob Johnson", "bob.johnson@example.com", "Assistant", "BIO"),
     ]
 
     try:
@@ -84,9 +84,9 @@ def populate_learning_objective_table(cursor, connection):
 
 def populate_program_table(cursor, connection):
     dummy_programs = [
-        ("Computer Science Program", "F001", "CS01"),
-        ("Engineering Program", "F002", "EN01"),
-        ("Biology Program", "F003", "BO01"),
+        ("Computer Science Program", "F001", "CS"),
+        ("Engineering Program", "F002", "EN"),
+        ("Biology Program", "F003", "BIO"),
     ]
 
     try:
@@ -100,9 +100,9 @@ def populate_program_table(cursor, connection):
 
 def populate_program_course_table(cursor, connection):
     dummy_program_courses = [
-        ("CS010001", "Computer Science Program"),
-        ("EN010001", "Engineering Program"),
-        ("BO010001", "Biology Program"),
+        ("CS0001", "Computer Science Program"),
+        ("EN0001", "Engineering Program"),
+        ("BIO0001", "Biology Program"),
     ]
 
     try:
@@ -132,9 +132,9 @@ def populate_program_objective_table(cursor, connection):
 
 def populate_section_table(cursor, connection):
     dummy_sections = [
-        (1, "CS010001", "Fall", 2023, "F001", 30),
-        (2, "EN010001", "Spring", 2023, "F002", 25),
-        (3, "BO010001", "Summer", 2023, "F003", 20),
+        (1, "CS0001", "Fall", 2023, "F001", 30),
+        (2, "EN0001", "Spring", 2023, "F002", 25),
+        (3, "BIO0001", "Summer", 2023, "F003", 20),
     ]
 
     try:
@@ -148,9 +148,9 @@ def populate_section_table(cursor, connection):
 
 def populate_section_eval_table(cursor, connection):
     dummy_section_evals = [
-        (1, "CS010001", "Computer Science Program", "LO001", "Exam", 25),
-        (2, "EN010001", "Engineering Program", "LO002", "Project", 20),
-        (3, "BO010001", "Biology Program", "LO003", "Quiz", 15),
+        (1, "CS0001", "Computer Science Program", "LO001", "Exam", 25),
+        (2, "EN0001", "Engineering Program", "LO002", "Project", 20),
+        (3, "BIO0001", "Biology Program", "LO003", "Quiz", 15),
     ]
 
     try:
