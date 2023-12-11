@@ -42,7 +42,7 @@ def check_fal_exists(cursor, fal_id):
         if cursor.fetchall():
             return True
         
-        print("Faculty member does not exist")
+        # print("Faculty member does not exist")
         return False
     except Error as e:
         print(f"Error executing Faculty Select: {e}")
@@ -108,8 +108,6 @@ def create_new_faculty_id(cursor):
         else:
             continue
 
-
-
 # creates a section id given a course, semester and year
 def create_sectionID(cursor, course_id, semester, year):
     com = "SELECT COUNT(*) FROM Section WHERE CourseID = '%s' AND SemesterName = '%s' AND CourseYear = %d" % (course_id, semester, year)
@@ -120,6 +118,7 @@ def create_sectionID(cursor, course_id, semester, year):
 
     id = str(num)
     return id
+
 
 '''Database Entry Functions'''
 
@@ -266,7 +265,6 @@ def enter_subObjective_data(cursor, connector, subObj_code, obj_code, subObj_des
         print(f"Error inserting Sub-Objectives data: {e}")
         return False
 
-# program course table 
 def assign_course_to_program(cursor, connector, course_id, prog_name):
     # check if course and program exists
     if not check_course_exists(cursor, course_id):
@@ -286,15 +284,8 @@ def assign_course_to_program(cursor, connector, course_id, prog_name):
     except Error as e:
         print(f"Error inserting Course to Program: {e}")
         return False
-    
 
-# helper function for assign_obj_to_course - for the course 
-
-# objectives are assigned to courses –> those objectives must also be assigned to that course's section 
-# Need to find all the sections of a course:
-# - known: couseId, prog_name and obj_code
-#   - have courseid -> can get the sections from Section table by searching with courseid and grouping by sectionid 
-#   - got sections -> can interate through them and add the obj_code to each section in the SectionEval table #
+# helper function for assign_obj_to_course - gets the sections given a course ID 
 def get_sections(cursor, connector, course_id):
     try:
         command = "SELECT SectionID FROM Section WHERE CourseID = '%s' GROUP BY SectionID" % (course_id)
@@ -316,6 +307,11 @@ def assign_obj_to_section(cursor, connector, section_id, course_id, prog_name, o
     except Error as e:
         print(f"Error assigning objective to section data: {e}")
         return False
+
+# FIXME: might need to merge the section and section eval table, so that we can search by semester and year for the course's section
+#   - functions affected:
+#       - assign_obj_to_course
+#       - enter_section_eval_results #
 
 # assigns a LO to a course-program pair (in the CourseEval table)
 def assign_obj_to_course(cursor, connection, co_id, prog_name, obj_code):
@@ -344,21 +340,6 @@ def assign_obj_to_course(cursor, connection, co_id, prog_name, obj_code):
             return False
     return False
 
-# FIXME: don't need this function, but need to fix the auto increment for SectionID in the Section table
-#   needs to auto increment in a way that for a course in a specific year and semester the sectionid starts from 001 to 999
-#       - example:
-#           - for CS2341 in Fall 2023 sections are: 001, 002, 003
-#           - for CS2341 in Spring 2023 sections are: 001, 002
-
-# def get_section_id(cursor, connection, c_id, semester, year):
-#     try:
-#         command = "SELECT SectionID, FacultyID FROM Section WHERE CourseID = '%s' AND \
-#             SemesterName = '%s' AND CourseYear = %d" % (c_id, semester, year) 
-#         cursor.execute(command)
-#         return cursor.fetchall()
-#     except Error as e:
-#         print(f"Error getting Section ID data: {e}")
-
 #enters the evaluation results for the specific section
 def enter_section_eval_results(cursor, connection, section_id, course_id, prog_name, obj_code, stud_met, eval_type):
     try:
@@ -384,7 +365,7 @@ def handle_program_entry(cursor, connection, name, pc_id, dept_code):
     if enter_program_info(cursor, connection, str(name), str(pc_id), str(dept_code)):
         return "Program Info Stored Successfully"
     else:
-        return "There was an issue entering the information, please try again."
+        return "There was an issue entering the program information, please try again."
     
 def handle_department_entry(cursor, connection, dept_code, dept_name):
     if not check_dept_code(dept_code):
