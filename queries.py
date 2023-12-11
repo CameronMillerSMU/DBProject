@@ -3,25 +3,17 @@ from mysql.connector import Error
 import re
 
 # Queries
-def get_department_details(cursor, department_code):
+def get_department(cursor, department_code):
     try:
         cursor.execute("""
-            SELECT
-                d.*,
-                p.ProgramID,
-                p.ProgramName,
-                f.FacultyID,
-                f.FacultyName,
-                pf.ProgramCoordinator
+            SELECT d.*, p.ProgramName, f.FacultyName, f.FacultyRank
             FROM Department d
             LEFT JOIN Program p ON d.DepartmentCode = p.DepartmentCode
-            LEFT JOIN ProgramFaculty pf ON p.ProgramID = pf.ProgramID
-            LEFT JOIN Faculty f ON pf.FacultyID = f.FacultyID
+            LEFT JOIN Faculty f ON d.DepartmentCode = f.DepartmentCode
             WHERE d.DepartmentCode = %s
         """, (department_code,))
 
         department_details = cursor.fetchall()
-
         if not department_details:
             return None
 
@@ -30,6 +22,7 @@ def get_department_details(cursor, department_code):
     except Error as e:
         print("Invalid input or error:", e)
         return None
+
 
 
 def get_faculty(cursor, faculty_id):
