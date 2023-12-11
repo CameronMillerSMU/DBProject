@@ -2,23 +2,17 @@ import mysql.connector as sql
 from mysql.connector import Error
 import re
 
-# Queries
+# given a dept, return 
 def get_department_details(cursor, department_code):
     try:
-        cursor.execute("""
-            SELECT
-                d.*,
-                p.ProgramID,
-                p.ProgramName,
-                f.FacultyID,
-                f.FacultyName,
-                pf.ProgramCoordinator
-            FROM Department d
-            LEFT JOIN Program p ON d.DepartmentCode = p.DepartmentCode
-            LEFT JOIN ProgramFaculty pf ON p.ProgramID = pf.ProgramID
-            LEFT JOIN Faculty f ON pf.FacultyID = f.FacultyID
-            WHERE d.DepartmentCode = %s
-        """, (department_code,))
+        cursor.execute("SELECT f.FacultyID, f.FacultyName \
+            FROM Department d \
+            INNER JOIN Faculty f ON f.DepartmentCode = d.DepartmentCode \
+            WHERE d.DepartmentCode = %s", (department_code,))
+
+        # select: returns dept_name, dept_code, prog_name, faculty of the dept and 
+        # 
+        #
 
         department_details = cursor.fetchall()
 

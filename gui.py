@@ -537,13 +537,18 @@ class DatabaseGUI:
         self.result_label.pack()
 
     def execute_department_query(self, department_code):
-        department_data = get_department(self.cursor, department_code)
-
+        # gets all the programs 
+        # gets the faculty members and their id 
+        # 
+        department_data = get_department_details(self.cursor, department_code)
+        print(department_data)
+        
         if not department_data:
             result_text = "Department does not exist. Please check department code."
         else:
-            department_name, department_code = department_data
-            result_text = f"Department Name: {department_name}\nDepartment Code: {department_code}"
+            # department_name, department_code = department_data
+            # 
+            result_text = f"Department Name: {department_data[0][0]}\nDepartment Code: {department_data[0][1]}"
         print(result_text)
 
         self.destroy_result_label()
@@ -585,7 +590,7 @@ if __name__ == "__main__":
     root = tk.Tk()
 
     """CHANGE THIS TO RUN"""
-    dbConn = create_connection("localhost", "root", "123456", "progDB")
+    dbConn = create_connection("localhost", "root", "beepboop", "progDB")
     cursor = dbConn.cursor()
     create_database(cursor, "progDB")
     clear_database(cursor, dbConn, tables)
