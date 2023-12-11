@@ -40,7 +40,7 @@ class DatabaseGUI:
         # destroy the previous selected option label
         self.destroy_result_label()
 
-        entry_options = ["Program", "Department", "Faculty", "Course", "Section", "Learning Objective"]
+        entry_options = ["Program", "Department", "Faculty", "Course", "Section", "Learning Objective", "Section Evaluation"]
         self.action_var.set("Entry")
         self.show_options(entry_options)
 
@@ -115,6 +115,8 @@ class DatabaseGUI:
             self.show_section_entry_form(selected_value)
         elif self.action_var.get() == "Entry" and selected_option == "Learning Objective":
             self.show_learning_objective_entry_form(selected_value)
+        elif self.action_var.get() == "Entry" and selected_option == "Section Evaluation":
+            self.show_section_evaluation_entry_form(selected_value)
 
     def show_program_entry_form(self, selected_value):
         self.destroy_option_widgets()
@@ -324,6 +326,68 @@ class DatabaseGUI:
         self.option_widgets["objective_description_entry"] = objective_description_entry
         self.option_widgets["execute_button"] = execute_button
 
+    def show_section_evaluation_entry_form(self, selected_value):
+        self.destroy_option_widgets()
+
+        # gathered for selection
+        objective_code_label = tk.Label(self.master, text=f"{selected_value} Objective Code (max 10 characters):")
+        objective_code_label.pack()
+
+        objective_code_entry = tk.Entry(self.master)
+        objective_code_entry.pack()
+
+        sec_id_label = tk.Label(self.master, text=f"{selected_value} Section ID (max 3 characters):")
+        sec_id_label.pack()
+
+        sec_id_entry = tk.Entry(self.master)
+        sec_id_entry.pack()
+
+        course_id_label = tk.Label(self.master, text=f"{selected_value} Course ID (max 8 characters):")
+        course_id_label.pack()
+
+        course_id_entry = tk.Entry(self.master)
+        course_id_entry.pack()
+
+        prog_label = tk.Label(self.master, text=f"{selected_value} Program Name (max 255 characters):")
+        prog_label.pack()
+
+        prog_entry = tk.Entry(self.master)
+        prog_entry.pack()
+
+
+
+        #actual updated value
+        stud_met_label = tk.Label(self.master, text=f"{selected_value} Students Met:")
+        stud_met_label.pack()
+
+        stud_met_entry = tk.Entry(self.master)
+        stud_met_entry.pack()
+
+        eval_type_label = tk.Label(self.master, text=f"{selected_value} Evaluation Type:")
+        eval_type_label.pack()
+
+        eval_type_entry = tk.Entry(self.master)
+        eval_type_entry.pack()
+        
+
+        #execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_learning_objective_entry(objective_code_entry.get(), objective_description_entry.get()))
+        execute_button = tk.Button(self.master, text="Execute", command=lambda: self.execute_section_eval_entry(sec_id_entry.get(), course_id_entry.get(), prog_entry.get(), objective_code_entry.get(), int(stud_met_entry.get()), eval_type_entry.get()))
+        execute_button.pack()
+
+        self.option_widgets["sec_id_label"] = sec_id_label
+        self.option_widgets["sec_id_entry"] = sec_id_entry
+        self.option_widgets["course_id_label"] = course_id_label
+        self.option_widgets["course_id_entry"] = course_id_entry
+        self.option_widgets["objective_code_label"] = objective_code_label
+        self.option_widgets["objective_code_entry"] = objective_code_entry
+        self.option_widgets["prog_label"] = prog_label
+        self.option_widgets["prog_entry"] = prog_entry
+        self.option_widgets["stud_met_label"] = stud_met_label
+        self.option_widgets["stud_met_entry"] = stud_met_entry
+        self.option_widgets["eval_type_label"] = eval_type_label
+        self.option_widgets["eval_type_entry"] = eval_type_entry
+
+        self.option_widgets["execute_button"] = execute_button
 
     def execute_program_entry(self, program_name, program_coordinator_id, department_code):
         result_text = handle_program_entry(self.cursor, self.connector, program_name, program_coordinator_id, department_code)
@@ -367,6 +431,14 @@ class DatabaseGUI:
 
     def execute_learning_objective_entry(self, objective_code, objective_description):
         result_text = handle_learningObjective_entry(self.cursor, self.connector, objective_code, objective_description)
+        print(result_text)
+
+        self.destroy_result_label()
+        self.result_label = tk.Label(self.master, text=result_text)
+        self.result_label.pack()
+
+    def execute_section_eval_entry(self, section_id, course_id, prog_name, obj_code, stud_met, eval_type):
+        result_text = handle_sectionEval_entry(self.cursor, self.connector, section_id, course_id, prog_name, obj_code, stud_met, eval_type)
         print(result_text)
 
         self.destroy_result_label()
