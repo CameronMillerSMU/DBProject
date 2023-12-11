@@ -118,9 +118,19 @@ class DatabaseGUI:
         elif self.action_var.get() == "Entry" and selected_option == "Section Evaluation":
             self.show_section_evaluation_entry_form(selected_value)
 
+
     def show_program_entry_form(self, selected_value):
         self.destroy_option_widgets()
 
+        # show faculty and their IDs
+        all_faculty_label = tk.Label(self.master, text="All current faculty: ")
+        all_faculty_label.pack()
+
+        all_faculty_text = tk.Text(self.master)
+        all_faculty_text.insert(tk.END, get_all_faculty(self.cursor))
+        all_faculty_text.pack()
+
+        # show form
         program_name_label = tk.Label(self.master, text=f"{selected_value} Name (max 255 characters):")
         program_name_label.pack()
 
@@ -148,6 +158,8 @@ class DatabaseGUI:
         self.option_widgets["program_coordinator_entry"] = program_coordinator_entry
         self.option_widgets["department_code_label"] = department_code_label
         self.option_widgets["department_code_entry"] = department_code_entry
+        self.option_widgets["all_faculty_text"] = all_faculty_text
+        self.option_widgets["all_faculty_label"] = all_faculty_label
         self.option_widgets["execute_button"] = execute_button
 
     def show_department_entry_form(self, selected_value):
@@ -546,14 +558,23 @@ class DatabaseGUI:
         if not department_data:
             result_text = "Department does not exist. Please check department code."
         else:
-            # department_name, department_code = department_data
-            # 
-            result_text = f"Department Name: {department_data[0][0]}\nDepartment Code: {department_data[0][1]}"
-        print(result_text)
+            result_text = ""
+            for row in department_data:
+                department_code, department_name, program_name, faculty_name, faculty_rank = row
+                result_text += f"Department Code: {department_code}\nDepartment Name: {department_name}\n"
+
+                if program_name:
+                    result_text += f"Program: {program_name}\n"
+
+                if faculty_name:
+                    result_text += f"Faculty: {faculty_name} (Rank: {faculty_rank})\n"
+
+                result_text += "\n"
 
         self.destroy_result_label()
         self.result_label = tk.Label(self.master, text=result_text)
         self.result_label.pack()
+
 
     def execute_semester_program_query(self, semester_name, program_name):
         program_data = get_section_eval_results(self.cursor, semester_name, program_name)

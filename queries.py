@@ -2,20 +2,18 @@ import mysql.connector as sql
 from mysql.connector import Error
 import re
 
-# given a dept, return 
-def get_department_details(cursor, department_code):
+# Queries
+def get_department(cursor, department_code):
     try:
-        cursor.execute("SELECT f.FacultyID, f.FacultyName \
-            FROM Department d \
-            INNER JOIN Faculty f ON f.DepartmentCode = d.DepartmentCode \
-            WHERE d.DepartmentCode = %s", (department_code,))
-
-        # select: returns dept_name, dept_code, prog_name, faculty of the dept and 
-        # 
-        #
+        cursor.execute("""
+            SELECT d.*, p.ProgramName, f.FacultyName, f.FacultyRank
+            FROM Department d
+            LEFT JOIN Program p ON d.DepartmentCode = p.DepartmentCode
+            LEFT JOIN Faculty f ON d.DepartmentCode = f.DepartmentCode
+            WHERE d.DepartmentCode = %s
+        """, (department_code,))
 
         department_details = cursor.fetchall()
-
         if not department_details:
             return None
 
@@ -25,6 +23,17 @@ def get_department_details(cursor, department_code):
         print("Invalid input or error:", e)
         return None
 
+def get_all_faculty(cursor):
+    try:
+        cursor.execute("SELECT * FROM Faculty")
+        all_faculty = cursor.fetchall()
+        if all_faculty is not None:
+            return "\n".join(map(str, all_faculty))
+        else:
+            return "There are no faculty"
+    except Error as e:
+        print("Invalid input or error: ", e)
+        return "Could not retrieve all faculty"
 
 def get_faculty(cursor, faculty_id):
     try:
