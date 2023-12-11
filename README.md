@@ -23,7 +23,26 @@ This is in no way, shape or form safe against SQL injections
 Demo Notes/To-Do
 
 * Cannot have two section id in different years/semesters
-* Get academic year query 
+* Entering results for a sectionEvaluation has no year, and the ids aren't unique,
+    * proposed sol: add year, semester to Section eval table
+    * issues: possibly duplicated data for no reason, should evaluations just go in section table?
+
+Question: Should I change evaluation table or leave it????
+
+
+Meeting Goals
+
+- hour 1
+    - make test/dummy data that aligns with our constraints
+    - Test all of the entries and queries make sure everything works
+    - finish up entry for section evaluation results
+- hour 2 
+    - finish presentation
+    - split up presentation duties 
+    - (individual/optional) make notes for presentation section 
+- hour 3 
+    - couple run throughs 
+    - overflow time
 
 
 ## Final Report instructions 
