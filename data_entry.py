@@ -308,11 +308,6 @@ def assign_obj_to_section(cursor, connector, section_id, course_id, prog_name, o
         print(f"Error assigning objective to section data: {e}")
         return False
 
-# FIXME: might need to merge the section and section eval table, so that we can search by semester and year for the course's section
-#   - functions affected:
-#       - assign_obj_to_course
-#       - enter_section_eval_results #
-
 # assigns a LO to a course-program pair (in the CourseEval table)
 def assign_obj_to_course(cursor, connection, co_id, prog_name, obj_code):
     # check if course, program pair exists
@@ -437,7 +432,6 @@ def handle_objCourse_assignment(cursor, connection, co_id, prog_name, obj_code):
     else:
         return "Error assigning objective to course."
 
-#FIXME: might need to add smester and year to SectionEval table
 #   - need to ba able to check that stud_met (SectionEval) <= stud_enrolled (Section)
 def handle_sectionEval_entry(cursor, connction, section_id, course_id, prog_name, obj_code, stud_met, eval_type):
     if enter_section_eval_results(cursor, connction, section_id, course_id, prog_name, obj_code, stud_met, eval_type):

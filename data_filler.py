@@ -238,5 +238,3 @@ def driver():
     print(handle_courseProgram_assignment(cursor, dbConn, "ABCD0001", "Test 2 Program"))
     print(handle_objCourse_assignment(cursor, dbConn, "ABCD0001",  "Test 2 Program", "LO1"))
     print(handle_sectionEval_entry(cursor, dbConn, "1", "ABCD0001", "Test 2 Program", "LO1", 20, "test"))
-
-    #TODO: test handle_sectionEval_entry
